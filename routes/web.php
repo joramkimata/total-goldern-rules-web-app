@@ -80,4 +80,8 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::post('quiz/question/update/{id}', 'QuestionController@updateQn')->name('question.update');
 	});	
 
+	Route::group(['middleware' => 'admin'], function() {
+		Route::get('app/departments', 'DepartmentController@index')->name('app.departments');
+	});
+
 });
