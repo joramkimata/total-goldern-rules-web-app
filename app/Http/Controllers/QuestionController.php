@@ -124,6 +124,35 @@ class QuestionController extends Controller
     }
 
     public function updateQn($id) {
+
+        $qn = Question::find($id);
+        $qn->question = request('question');
+        $qn->category = request('category');
+
+
+        if(request()->hasFile('attachedPhotoEdit')) {
+            //let us upload photo
+            $qn->qn_photo_location =  \App\HelperX::uplodFileThenReturnPath('attachedPhotoEdit');
+        }
+
+        $qn->save();
+
+        Answer::where('question_id', $id)->delete();
+
+        $answers = json_decode(request('answers'), true);
+        foreach ($answers as $a) {
+            $answer_body    = $a["body"];
+            $answer_correct = $a["correct"];
+            $anw = new Answer;
+            $anw->question_id = $qn->id;
+            $anw->answer = $answer_body;
+            $anw->correct = $answer_correct;
+            $anw->save();
+        }
+
+
+
+
         return dd(request()->all());
     }
 

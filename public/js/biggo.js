@@ -76,6 +76,7 @@ function removeOpacity(el){
 }
 
 function imageUploadDisplay(imageId, imagePlaceholder, w=92, h=92, rId='removeLogo'){
+
 	var fileInput = document.getElementById(imageId);
 	var fileDisplayArea = document.getElementById(imagePlaceholder);
 	fileInput.addEventListener('change', function(e) {

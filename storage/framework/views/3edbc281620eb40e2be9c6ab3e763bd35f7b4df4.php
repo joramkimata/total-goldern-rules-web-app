@@ -6,34 +6,54 @@
 		</span></h5>
 
 
-        <textarea class="form-control" id="editXQn" style="width: 100%" rows="4"><?php echo e($q->question); ?></textarea><br/>
+        <textarea class="form-control" name="question" id="editXQn" style="width: 100%" rows="4"><?php echo e($q->question); ?></textarea><br/>
 
 
         <div class="answers-option ml-5 ">
 
             <?php if($q->qn_photo_location != ""): ?>
                 <br/>
-                <img  src="<?php echo e($q->qn_photo_location); ?>" style="width: 100%; height: 350px; display: block"/>
+                <img id="imgEditX" src="<?php echo e($q->qn_photo_location); ?>" style="width: 100%; height: 350px; display: block"/>
                 <br/>
                 <div class="form-group">
                     <div class="input-group">
-                        <button id="attachPhoto" type="button" class="btn btn-success"><i class="fa fa-paperclip"></i>
+                        <button id="attachPhotoEditXj" type="button" class="btn btn-success"><i class="fa fa-paperclip"></i>
                             Change Photo
                         </button>
-                        <input id="attachedPhoto" type="file" name="attachedPhoto" hidden/>
+                        <input id="attachPhotoEditXjx" type="file" name="attachedPhotoEditXjx" hidden/>
                     </div>
                 </div>
+                <script type="text/javascript">
+                    var fileInput = document.getElementById('attachPhotoEditXjx');
+                    fileInput.addEventListener('change', function(e) {
+                        var file = fileInput.files[0];
+                        var imageType = /image.*/;
+                        if (file.type.match(imageType)) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                $('#imgEditX').prop('src', reader.result);
+                            }
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                </script>
             <?php else: ?>
                 <div class="form-group">
                     <div class="input-group">
-                        <button id="attachPhoto" type="button" class="btn btn-success"><i class="fa fa-paperclip"></i>
+                        <button id="attachPhotoEdit" type="button" class="btn btn-success"><i class="fa fa-paperclip"></i>
                             Attach Photo
                         </button>
-                        <input id="attachedPhoto" type="file" name="attachedPhoto" hidden/>
+                        <input id="attachedPhotoEdit" type="file" name="attachedPhotoEdit" hidden/>
 
                     </div>
                 </div>
-                <div id="photoAttachment"></div>
+                <div id="photoAttachmentEdit"></div>
+                <script src="<?php echo e(url('js/biggo.js')); ?>"></script>
+                <script type="text/javascript">
+                    $(function() {
+                        Biggo.imageUploadDisplay('attachedPhotoEdit', 'photoAttachmentEdit', 340, 240)
+                    });
+                </script>
             <?php endif; ?>
 
             <hr/>
@@ -129,4 +149,6 @@
         </div>
     </div>
 </form>
+
+
 

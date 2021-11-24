@@ -390,6 +390,14 @@
                 $("#attachedPhoto").click();
             });
 
+            $('body').on('click', '#attachPhotoEdit', function () {
+                $("#attachedPhotoEdit").click();
+            });
+
+            $('body').on('click', '#attachPhotoEditXj', function () {
+                $("#attachPhotoEditXjx").click();
+            });
+
 
             function getQNEditor(route, qn, quizid) {
 
@@ -523,9 +531,28 @@
                         }
                     }
 
+                    var isFileUpload = false;
+                    var formdata;
 
-                    console.log(answersX)
+                    if (Biggo.isFileValueSetted(attachedPhotoEdit) != undefined) {
+                        var arr = Biggo.serializeData(editQuestionFormX);
+                        arr.push({name: "answers", value: JSON.stringify(answersX)});
+                        arr.push({name: "_token", value: '<?php echo e(csrf_token()); ?>'})
+                        var arr2 = ["attachedPhotoEdit"];
+                        isFileUpload = true;
+                        formdata = Biggo.prepareFormData(arr, arr2);
+                    } else {
+                        formdata = Biggo.serializeData(editQuestionFormX);
+                        formdata.push({name: "_token", value: '<?php echo e(csrf_token()); ?>'});
+                        formdata.push({name: "answers", value: JSON.stringify(answersX)});
+                    }
 
+
+                    console.log(formdata);
+
+                    var route = $(this).attr('route');
+
+                    var biggo = Biggo.talkToServer(route, formdata, isFileUpload);
 
                 }
 
