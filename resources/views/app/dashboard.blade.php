@@ -186,7 +186,7 @@
 </div>
 <br/>
 <?php 
- $c = \App\User::where('role_id', '!=', 1)->where('verified', 0)->count();
+ $c = \App\User::where('role_id', '!=', 1)->where('active', 0)->count();
 ?>
 @if($c)
 <div class="row">
@@ -199,23 +199,27 @@
         <!-- <span>
             <input type="text" class="form-control" style="width: 300px" placeholder="Search User!" />
         </span> -->
+        <?php
+            $uc = \App\User::where('role_id', '!=', 1)->where('active', 0)->count();
+        ?>
+
+        @if($uc > 0)
         <span>
         <i class="fa fa-users"></i>
-        New Users Registered! Wait For Verification ({{\App\User::where('role_id', '!=', 1)->count()}})
+        New Users Registered! Wait For Verification ({{$uc}})
         </span>
+        @endif
         
         </h5>
         <hr/>
         
         <table id="dataTable" class="table table-striped table-bordered">
 				<thead>
-					<tr>
+					<tr style="background-color: #666; color: #fff">
 						<th><input type="checkbox" id="actAll" value="all" /></th>
 						<th>#</th>
 						<th>Name</th>
 						<th>Email</th>
-                        <th>Status</th>
-                        <th>Verified</th>
 						<th>Registered At</th>
 						<th>Manage</th>
 					</tr>
@@ -228,14 +232,12 @@
 
 					?>
 					@foreach($users as $u)
-					<tr>
+					<tr style="font-size: 2rem">
                         <td><input type="checkbox" class="checkitem" userid="{{$u->id}}" /></td>
 						<td>{{$i}}</td>
 						<td>{{$u->name}}</td>
 						<td>{{$u->email}}</td>
-						<td>{!! $u->active == 1 ? '<label class="label label-success">Active</label>' : '<label class="alert alert-danger">Blocked</label>' !!}</td>
-                        <td>{!! $u->verified == 1 ? '<label class="label label-success">YES</label>' : '<label class="alert alert-danger">NO</label>' !!}</td>
-                        <td>{{$u->created_at}}</td>
+						<td>{{$u->created_at}}</td>
                         <td><button userid="{{$u->id}}" class="btn btn-danger btn-sm" id="activateSingle"><i class="fa fa-check"></i> Active User</button></td>
 					</tr>
 					<?php $i++; ?>

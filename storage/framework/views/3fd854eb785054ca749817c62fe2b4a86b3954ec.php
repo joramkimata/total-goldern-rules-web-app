@@ -186,7 +186,7 @@
 </div>
 <br/>
 <?php 
- $c = \App\User::where('role_id', '!=', 1)->where('verified', 0)->count();
+ $c = \App\User::where('role_id', '!=', 1)->where('active', 0)->count();
 ?>
 <?php if($c): ?>
 <div class="row">
@@ -199,23 +199,27 @@
         <!-- <span>
             <input type="text" class="form-control" style="width: 300px" placeholder="Search User!" />
         </span> -->
+        <?php
+            $uc = \App\User::where('role_id', '!=', 1)->where('active', 0)->count();
+        ?>
+
+        <?php if($uc > 0): ?>
         <span>
         <i class="fa fa-users"></i>
-        New Users Registered! Wait For Verification (<?php echo e(\App\User::where('role_id', '!=', 1)->count()); ?>)
+        New Users Registered! Wait For Verification (<?php echo e($uc); ?>)
         </span>
+        <?php endif; ?>
         
         </h5>
         <hr/>
         
         <table id="dataTable" class="table table-striped table-bordered">
 				<thead>
-					<tr>
+					<tr style="background-color: #666; color: #fff">
 						<th><input type="checkbox" id="actAll" value="all" /></th>
 						<th>#</th>
 						<th>Name</th>
 						<th>Email</th>
-                        <th>Status</th>
-                        <th>Verified</th>
 						<th>Registered At</th>
 						<th>Manage</th>
 					</tr>
@@ -228,14 +232,12 @@
 
 					?>
 					<?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-					<tr>
+					<tr style="font-size: 2rem">
                         <td><input type="checkbox" class="checkitem" userid="<?php echo e($u->id); ?>" /></td>
 						<td><?php echo e($i); ?></td>
 						<td><?php echo e($u->name); ?></td>
 						<td><?php echo e($u->email); ?></td>
-						<td><?php echo $u->active == 1 ? '<label class="label label-success">Active</label>' : '<label class="alert alert-danger">Blocked</label>'; ?></td>
-                        <td><?php echo $u->verified == 1 ? '<label class="label label-success">YES</label>' : '<label class="alert alert-danger">NO</label>'; ?></td>
-                        <td><?php echo e($u->created_at); ?></td>
+						<td><?php echo e($u->created_at); ?></td>
                         <td><button userid="<?php echo e($u->id); ?>" class="btn btn-danger btn-sm" id="activateSingle"><i class="fa fa-check"></i> Active User</button></td>
 					</tr>
 					<?php $i++; ?>
@@ -361,4 +363,5 @@ $(function() {
 })
 </script>
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

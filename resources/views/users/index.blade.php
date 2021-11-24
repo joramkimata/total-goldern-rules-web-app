@@ -54,7 +54,7 @@
 						<td>{{$i}}</td>
 						<td>{{$u->name}}</td>
 						<td>{{$u->phone}}</td>
-						<td></td>
+						<td>{{$u->department->name}}</td>
 						<td>{{$u->email}}</td>
 						<td>{!! $u->active == 1 ? '<label class="badge badge-success">Active</label>' : '<label class="badge badge-danger">Blocked</label>' !!}</td>
 						<td>

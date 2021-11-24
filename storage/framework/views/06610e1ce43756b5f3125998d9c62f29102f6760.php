@@ -54,7 +54,7 @@
 						<td><?php echo e($i); ?></td>
 						<td><?php echo e($u->name); ?></td>
 						<td><?php echo e($u->phone); ?></td>
-						<td></td>
+						<td><?php echo e($u->department->name); ?></td>
 						<td><?php echo e($u->email); ?></td>
 						<td><?php echo $u->active == 1 ? '<label class="badge badge-success">Active</label>' : '<label class="badge badge-danger">Blocked</label>'; ?></td>
 						<td>

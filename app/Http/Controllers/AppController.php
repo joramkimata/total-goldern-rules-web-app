@@ -139,6 +139,9 @@ class AppController extends Controller
         $fullname = request('register_name');
         $email    = trim(request('register_email'));
         $password = request('register_password_confirm');
+         $phone     = request('phone');
+         $department_id     = request('department_id');
+
         $check = User::where('email', $email)->count();
         if($check) {
             return response()->json([
@@ -150,6 +153,8 @@ class AppController extends Controller
         $u = new User;
         $u->name     = $fullname;
         $u->email    = $email;
+        $u->phone    = $phone;
+        $u->department_id = $department_id;
         $u->password = bcrypt($password);
         $u->role_id  = 2;
         $u->save(); 

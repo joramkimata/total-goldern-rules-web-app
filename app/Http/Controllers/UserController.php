@@ -31,6 +31,7 @@ class UserController extends Controller
         $user->phone = $phone;
         $user->department_id = $department_id;
         $user->password = bcrypt($password);
+        $user->role_id  = 2;
 
         $user->save();
 
@@ -95,6 +96,8 @@ class UserController extends Controller
     public function update($id){
         $fullname = request('fullname');
         $email    = request('email');
+        $phone     = request('phone');
+        $department_id     = request('department_id');
         $check    = User::where('email', $email)->where('id', '!=', $id)->count();
 
         if($check){
@@ -107,6 +110,8 @@ class UserController extends Controller
         $user = User::find($id);
         $user->name = $fullname;
         $user->email = $email;
+        $user->phone = $phone;
+        $user->department_id = $department_id;
         $user->save();
 
         return response()->json([

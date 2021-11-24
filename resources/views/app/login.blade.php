@@ -95,11 +95,28 @@
 							data-errormessage-value-missing="Fullname is required!"  />
 						</div>
 						<div class="form-group">
+                            <label for="phone" class="col-form-label">Phone:</label>
+                            <input type="text" name="phone" class="validate[required] form-control" id="phone"
+                            data-errormessage-value-missing="Phone is required!"
+                            />
+                        </div>
+						<div class="form-group">
 							<label for="register_email">Email address</label>
 							<input type="email" class="validate[required,custom[email]] form-control" id="register_email" name="register_email"
 							data-errormessage-value-missing="Email is required!" 
 							 />
 						</div>
+						<div class="form-group">
+                            <label for="department_id" class="col-form-label">Department:</label>
+                            <select name="department_id" class="validate[required] form-control" id="department_id"
+                            data-errormessage-value-missing="Department is required!"
+                            >
+                            <option value="">--SELECT DEPARTMENT--</option>
+                            @foreach(\App\Department::all() as $d)
+                                <option value="{{$d->id}}">{{$d->name}}</option>
+                            @endforeach
+                        </select>
+                        </div>
 						<div class="form-group">
 							<label for="register_password">Password</label>
 							<input type="password" class="validate[required] form-control" id="register_password" name="register_password"
