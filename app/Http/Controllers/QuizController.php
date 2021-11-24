@@ -158,10 +158,26 @@ class QuizController extends Controller
         Quiz::find($id)->delete();
     }
 
-    public function destroy($id) {
-        $q = Question::find($id);
+    public function destroy($qid) {
+
+        $q = Question::find($qid);
+        $id = $q->quiz_id;
         $q->delete();
-        $a = Answer::where('question_id', $id)->delete();
+        $a = Answer::where('question_id', $qid)->delete();
+
+        if($a) {
+            $quiz = Quiz::find($id);
+            $questions = $quiz->questions;
+
+            foreach($questions as $k => $q) {
+                $qn = Question::find($q->id);
+                $qn->qn_no = ($k+1);
+                $qn->save();
+            }
+
+        }
+
+        return view('quiz.preview', compact('id'));
     }
 
     public function update($id){

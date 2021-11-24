@@ -1,4 +1,4 @@
-
+<div id="ndaniPreviewQuiz">
 <?php 
 
 $quiz = \App\Quiz::find($id);
@@ -27,9 +27,9 @@ $i = 1;
 	@endif
 	@endif
 
-	@foreach($questions as $q)
+	@foreach($questions as $index => $q)
 	<fieldset class="mb-3" id="qn{{$q->id}}">
-		<h5 class="d-flex"><span class="question-number">{{$q->qn_no < 10 ? '0'.$q->qn_no : $q->qn_no}}.</span> <span>
+		<h5 class="d-flex"><span class="question-number">{{$q->qn_no < 10 ? '0'.($index + 1) : ($index + 1)}}.</span> <span>
 			{{$q->question}}
 		</span></h5>
 		<div class="answers-option ml-5 ">
@@ -43,13 +43,13 @@ $i = 1;
 
 			@if($q->category == "single")
 			<div class="custom-control custom-radio">
-				<input type="radio" id="question{{$q->id}}_answer_{{$a->id}}_single" {!! $checked !!} name="customRadio_{{$a->id}}" class="custom-control-input">
+				<input disabled="true" type="radio" id="question{{$q->id}}_answer_{{$a->id}}_single" {!! $checked !!} name="customRadio_{{$a->id}}" class="custom-control-input">
 				<label class="custom-control-label {{ $a->correct == 0 ? '' : 'text-success' }}" for="question{{$q->id}}_answer{{$a->id}}">{{$a->answer}}</label>
 			</div>
 			@endif
 			@if($q->category == "multiple")
 			<div class="custom-control custom-checkbox">
-				<input type="checkbox" class="custom-control-input" {!! $checked !!} id="question{{$q->id}}_answer{{$a->id}}">
+				<input disabled="true" type="checkbox" class="custom-control-input" {!! $checked !!} id="question{{$q->id}}_answer{{$a->id}}">
 				<label class="custom-control-label {{ $a->correct == 0 ? '' : 'text-success' }}" for="question{{$q->id}}_answer{{$a->id}}">{{$a->answer}}</label>
 			</div>
 			@endif
@@ -57,12 +57,14 @@ $i = 1;
 
 			@if($q->qn_photo_location != "")
 				<br/>
-				<img src="{{$q->qn_photo_location}}" style="width: 450px" />
+				<img src="{{$q->qn_photo_location}}" style="width: 60%; height: 350px" />
 			@endif
 			
 			@if($quiz->quiz_status == 'DRAFTED')
-			<hr/>
-			<p> <span style="cursor: pointer;" qn="{{$q->id}}" class="editQn" quizid="{{$id}}" route="{{route('question.edit',$q->id)}}"><i class="fa fa-edit text-success"></i> Edit </span>  <!--  <span style="cursor: pointer;" disabled="true" class="deleteQn" route="{{route('quiz.destroy',$q->id)}}"><i class="fa fa-trash text-danger"></i> Delete </span> --></p>
+			    <hr/>
+			    <p>
+			    <span style="cursor: pointer;" qn="{{$q->id}}" class="editQn" quizid="{{$id}}" route="{{route('question.edit',$q->id)}}"><i class="fa fa-edit text-success"></i> Edit </span>
+			    <span style="cursor: pointer;" disabled="true" class="deleteQn" route="{{route('quiz.destroy',$q->id)}}"><i class="fa fa-trash text-danger"></i> Delete </span> </p>
 			@else
 			
 			@endif
@@ -101,3 +103,4 @@ $i = 1;
 </div>
 
 @endif
+</div>

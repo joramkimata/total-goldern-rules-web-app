@@ -1,4 +1,4 @@
-
+<div id="ndaniPreviewQuiz">
 <?php 
 
 $quiz = \App\Quiz::find($id);
@@ -27,9 +27,9 @@ $i = 1;
 	<?php endif; ?>
 	<?php endif; ?>
 
-	<?php $__currentLoopData = $questions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $q): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+	<?php $__currentLoopData = $questions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $q): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 	<fieldset class="mb-3" id="qn<?php echo e($q->id); ?>">
-		<h5 class="d-flex"><span class="question-number"><?php echo e($q->qn_no < 10 ? '0'.$q->qn_no : $q->qn_no); ?>.</span> <span>
+		<h5 class="d-flex"><span class="question-number"><?php echo e($q->qn_no < 10 ? '0'.($index + 1) : ($index + 1)); ?>.</span> <span>
 			<?php echo e($q->question); ?>
 
 		</span></h5>
@@ -44,13 +44,13 @@ $i = 1;
 
 			<?php if($q->category == "single"): ?>
 			<div class="custom-control custom-radio">
-				<input type="radio" id="question<?php echo e($q->id); ?>_answer_<?php echo e($a->id); ?>_single" <?php echo $checked; ?> name="customRadio_<?php echo e($a->id); ?>" class="custom-control-input">
+				<input disabled="true" type="radio" id="question<?php echo e($q->id); ?>_answer_<?php echo e($a->id); ?>_single" <?php echo $checked; ?> name="customRadio_<?php echo e($a->id); ?>" class="custom-control-input">
 				<label class="custom-control-label <?php echo e($a->correct == 0 ? '' : 'text-success'); ?>" for="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>"><?php echo e($a->answer); ?></label>
 			</div>
 			<?php endif; ?>
 			<?php if($q->category == "multiple"): ?>
 			<div class="custom-control custom-checkbox">
-				<input type="checkbox" class="custom-control-input" <?php echo $checked; ?> id="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>">
+				<input disabled="true" type="checkbox" class="custom-control-input" <?php echo $checked; ?> id="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>">
 				<label class="custom-control-label <?php echo e($a->correct == 0 ? '' : 'text-success'); ?>" for="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>"><?php echo e($a->answer); ?></label>
 			</div>
 			<?php endif; ?>
@@ -58,12 +58,14 @@ $i = 1;
 
 			<?php if($q->qn_photo_location != ""): ?>
 				<br/>
-				<img src="<?php echo e($q->qn_photo_location); ?>" style="width: 450px" />
+				<img src="<?php echo e($q->qn_photo_location); ?>" style="width: 60%; height: 350px" />
 			<?php endif; ?>
 			
 			<?php if($quiz->quiz_status == 'DRAFTED'): ?>
-			<hr/>
-			<p> <span style="cursor: pointer;" qn="<?php echo e($q->id); ?>" class="editQn" quizid="<?php echo e($id); ?>" route="<?php echo e(route('question.edit',$q->id)); ?>"><i class="fa fa-edit text-success"></i> Edit </span>  <!--  <span style="cursor: pointer;" disabled="true" class="deleteQn" route="<?php echo e(route('quiz.destroy',$q->id)); ?>"><i class="fa fa-trash text-danger"></i> Delete </span> --></p>
+			    <hr/>
+			    <p>
+			    <span style="cursor: pointer;" qn="<?php echo e($q->id); ?>" class="editQn" quizid="<?php echo e($id); ?>" route="<?php echo e(route('question.edit',$q->id)); ?>"><i class="fa fa-edit text-success"></i> Edit </span>
+			    <span style="cursor: pointer;" disabled="true" class="deleteQn" route="<?php echo e(route('quiz.destroy',$q->id)); ?>"><i class="fa fa-trash text-danger"></i> Delete </span> </p>
 			<?php else: ?>
 			
 			<?php endif; ?>
@@ -102,3 +104,4 @@ $i = 1;
 </div>
 
 <?php endif; ?>
+</div>
