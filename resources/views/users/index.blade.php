@@ -15,14 +15,28 @@
 </script>
 @endif
 
+@if(session()->has('error'))
+<div class="alert alert-danger flush">
+	<i class="fa fa-check"></i> {{session()->get('error')}}
+</div>
+<script src="{{url('js/jquery.min.js')}}"></script>
+<script type="text/javascript">
+	$('.flush').delay(5000).fadeOut();
+</script>
+@endif
+
 <div class="page-class">
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal"><i class="fa fa-plus"></i> Add New User</button>
+			<hr />
 			<table id="dataTable" class="table table-striped table-bordered">
-				<thead>
+				<thead style="background: #666; color: #FFF; ">
 					<tr>
 						<th>#</th>
 						<th>Name</th>
+						<th>Phone</th>
+						<th>Department</th>
 						<th>Email</th>
 						<th>Status</th>
 						<th>Manage</th>
@@ -39,16 +53,18 @@
 					<tr>
 						<td>{{$i}}</td>
 						<td>{{$u->name}}</td>
+						<td>{{$u->phone}}</td>
+						<td></td>
 						<td>{{$u->email}}</td>
-						<td>{!! $u->active == 1 ? '<label class="alert alert-success">Active</label>' : '<label class="alert alert-danger">Blocked</label>' !!}</td>
+						<td>{!! $u->active == 1 ? '<label class="badge badge-success">Active</label>' : '<label class="badge badge-danger">Blocked</label>' !!}</td>
 						<td>
-							<button class="btn btn-primary btn-sm editUser" route="{{route('users.edit', $u->id)}}" userid="{{$u->id}}"  data-toggle="modal" data-target="#userModal" ><i class="fa fa-edit"></i> Edit User</button>
+							<button class="btn btn-primary btn-sm editUser" title="Edit User" route="{{route('users.edit', $u->id)}}" userid="{{$u->id}}"  data-toggle="modal" data-target="#userModal" ><i class="fa fa-edit"></i> </button>
 							@if($u->active == 1)
-							<button class="btn btn-danger btn-sm deactivate" userid="{{$u->id}}"><i class="fa fa-lock"></i> De-activate</button>
+							<button title="De-activate" class="btn btn-danger btn-sm deactivate" userid="{{$u->id}}"><i class="fa fa-lock"></i> </button>
 							@else
-							<button class="btn btn-success btn-sm activate" userid="{{$u->id}}"><i class="fa fa-unlock"></i> Activate</button>
+							<button title="Activate" class="btn btn-success btn-sm activate" userid="{{$u->id}}"><i class="fa fa-unlock"></i> </button>
 							@endif
-							<button class="btn btn-warning btn-sm changepassword" userid="{{$u->id}}" route="{{route('app.changepassword', $u->id)}}" data-toggle="modal" data-target="#changePassword"><i class="fa fa-key"></i> Change Password</button>
+							<button title="Change Password" class="btn btn-warning btn-sm changepassword" userid="{{$u->id}}" route="{{route('app.changepassword', $u->id)}}" data-toggle="modal" data-target="#changePassword"><i class="fa fa-key"></i> </button>
 						</td>
 					</tr>
 					<?php $i++; ?>
@@ -59,6 +75,76 @@
 		</div>
 	</div>
 </div>
+
+<article>
+	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addQuizModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered " role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-center" id="addQuizModalLabel">Add New User</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form action="{{route('users.store')}}" method="POST" id="addUserForm" onsubmit="return processAddUser()">
+					<div class="modal-body">
+                        {{csrf_field()}}
+						<div class="form-group">
+							<label for="add-full-name" class="col-form-label">Full Name:</label>
+                            <input type="text" name="full_name" class="validate[required] form-control" id="add-full-name"
+                            data-errormessage-value-missing="Full name is required!"
+                            />
+						</div>
+						<div class="form-group">
+							<label for="phone" class="col-form-label">Phone:</label>
+                            <input type="text" name="phone" class="validate[required] form-control" id="phone"
+                            data-errormessage-value-missing="Phone is required!"
+                            />
+						</div>
+						
+						<div class="form-group">
+							<label for="email" class="col-form-label">Email:</label>
+                            <input type="text" name="email" class="validate[required] form-control" id="email"
+                            data-errormessage-value-missing="Email is required!"
+                            />
+						</div>
+
+						<div class="form-group">
+                            <label for="register_password">Password</label>
+                            <input type="password" class="validate[required] form-control" id="register_password" name="register_password"
+                            data-errormessage-value-missing="Password is required!"
+                             />
+                        </div>
+                        <div class="form-group">
+                            <label for="register_password_confirm">Confirm Password</label>
+                            <input type="password" class="validate[required,equals[register_password]] form-control" id="register_password_confirm" name="register_password_confirm"
+                            data-errormessage-value-missing="Confirm password is required!"
+                            data-errormessage="Password mismatches!" />
+                        </div>
+
+						<div class="form-group">
+							<label for="department_id" class="col-form-label">Department:</label>
+                            <select name="department_id" class="validate[required] form-control" id="department_id"
+                            data-errormessage-value-missing="Department is required!"
+                            >
+							<option value="">--SELECT DEPARTMENT--</option>
+							@foreach(\App\Department::all() as $d)
+								<option value="{{$d->id}}">{{$d->name}}</option>
+							@endforeach
+						</select>
+						</div>
+						
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Create User</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</article>
+
+
 <article>
 	<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered " role="document">
@@ -106,13 +192,19 @@
 
 @section('scripts')
 
-	<script src="{{url('js/jquery.dataTables.min.js')}}"></script>
-	<script src="{{url('js/dataTables.bootstrap4.min.js')}}"></script>
-	<script src="{{url('js/dataTables.buttons.min.js')}}"></script>
-	<script src="{{url('js/buttons.bootstrap4.min.js')}}"></script>
-	<script src="{{url('js/buttons.html5.min.js')}}"></script>
-	<script src="{{url('js/buttons.flash.min.js')}}"></script>
-	<script src="{{url('js/buttons.print.min.js')}}"></script>
+<script>
+function processAddUser() {
+    return $("#addUserForm").validationEngine('validate');
+}
+</script>
+
+<script src="{{url('js/jquery.dataTables.min.js')}}"></script>
+<script src="{{url('js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{url('js/dataTables.buttons.min.js')}}"></script>
+<script src="{{url('js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{url('js/buttons.html5.min.js')}}"></script>
+<script src="{{url('js/buttons.flash.min.js')}}"></script>
+<script src="{{url('js/buttons.print.min.js')}}"></script>
 <script>
 	$(document).ready(function () {
 

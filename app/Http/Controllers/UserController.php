@@ -11,6 +11,34 @@ class UserController extends Controller
     	return view('users.index');
     }
 
+    public function store() {
+        $full_name = request('full_name');
+        $phone     = request('phone');
+        $email     = request('email');
+        $department_id     = request('department_id');
+        $password = request('register_password_confirm');
+
+
+        $check = User::where('email', $email)->count();
+
+        if($check > 0) {
+            return redirect()->back()->with('error', 'User ' . $email . ' exists');
+        }
+
+        $user = new User;
+        $user->name = $full_name;
+        $user->email = $email;
+        $user->phone = $phone;
+        $user->department_id = $department_id;
+        $user->password = bcrypt($password);
+
+        $user->save();
+
+
+        return redirect()->back()->with('success', 'Successfully saved');
+
+    }
+
     public function activateAll() {
        $userids = request('userids');
        

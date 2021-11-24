@@ -4,6 +4,7 @@
 
 @section('content')
 <div class="page-class">
+
 	<div class="mt-3">
 		<table id="dTDeparts" class="table table-striped table-bordered">
 			<thead>

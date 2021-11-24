@@ -60,7 +60,7 @@ $i = 1;
 				<img src="{{$q->qn_photo_location}}" style="width: 450px" />
 			@endif
 			
-			@if($quiz->status == 0)
+			@if($quiz->quiz_status == 'DRAFTED')
 			<hr/>
 			<p> <span style="cursor: pointer;" qn="{{$q->id}}" class="editQn" quizid="{{$id}}" route="{{route('question.edit',$q->id)}}"><i class="fa fa-edit text-success"></i> Edit </span>  <!--  <span style="cursor: pointer;" disabled="true" class="deleteQn" route="{{route('quiz.destroy',$q->id)}}"><i class="fa fa-trash text-danger"></i> Delete </span> --></p>
 			@else
@@ -78,7 +78,7 @@ $i = 1;
 
 	<hr/>
 	@if($quiz->questions_no == count($questions))
-	@if($quiz->status == 0)
+	@if($quiz->is_published == 0)
 	<button 
 		type="button" 
 		id="publishQuiz"
@@ -86,7 +86,7 @@ $i = 1;
         route="{{route('quiz.publish', $quiz->id)}}"
 		><i class="fa fa-cog"></i> Publish Quiz Now
 	</button>
-	@else
+	@elseif($quiz->quiz_status == 'EXECUTION_STARTED')
 	<button 
 		type="button" 
 		id="publishUnQuiz"

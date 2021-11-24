@@ -134,7 +134,7 @@ class QuizController extends Controller
 
     public function unpublish($id) {
         $quiz = Quiz::find($id);
-        $quiz->status = 0;
+        $quiz->quiz_status = 'EXECUTION_DONE';
         $quiz->save();
         // send Email here to every one
         //\App\HelperX::sendEmails('emails.quizpublished_mail', 'NEW QUIZ PUBLISHED!');
@@ -142,7 +142,8 @@ class QuizController extends Controller
 
     public function publish($id) {
         $quiz = Quiz::find($id);
-        $quiz->status = 1;
+        $quiz->is_published = true;
+        $quiz->quiz_status = 'EXECUTION_STARTED';
         $quiz->save();
         // send Email here to every one
         //\App\HelperX::sendEmails('emails.quizpublished_mail', 'NEW QUIZ PUBLISHED!');
@@ -151,6 +152,10 @@ class QuizController extends Controller
     public function cancel($id) {
         $quizid = request('quizid');
         return view('quiz.questionsEditX', compact('id', 'quizid'));
+    }
+
+    public function destroyQuiz($id) {
+        Quiz::find($id)->delete();
     }
 
     public function destroy($id) {
@@ -184,10 +189,20 @@ class QuizController extends Controller
         return redirect()->back()->with('success', 'Successfully Updated!');
     }
 
+     public function deleted() {
+            return redirect()->back()->with('success', 'Successfully deleted!');
+     }
+
     public function store() {
         $quiz_name         = request('quiz_name');
         $quiz_no_questions = request('quiz_no_questions');
         $quiz_description  = request('quiz_description');
+
+        $check = Quiz::where('quiz_name', $quiz_name)->where('questions_no', $quiz_no_questions)->count();
+
+        if($check > 0) {
+            return redirect()->back()->with('error', 'Quiz exists!');
+        }
 
         $q = new Quiz;
         $q->quiz_name = $quiz_name;

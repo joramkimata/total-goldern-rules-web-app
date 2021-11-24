@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('/app/changepassword/{id}', 'AppController@changepassword')->name('app.changepassword');
 	//Users
 	Route::group(['middleware' => 'admin'], function() {
+		Route::post('app/users', 'UserController@store')->name('users.store');
 		Route::get('/app/users', 'UserController@index')->name('app.users');
 		Route::get('/app/reminders', 'ReminderController@index')->name('app.reminders');
 		Route::get('/app/reminders/refresh', 'ReminderController@refresh')->name('app.reminders.refresh');
@@ -60,9 +61,11 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('quiz/unpublish/results/{id}', 'QuizController@unpublishResults')->name('quiz.unpublish.results');
 	Route::get('quiz/report/{id}', 'QuizController@report')->name('quiz.report');
 	Route::post('quiz/destroy/{id}', 'QuizController@destroy')->name('quiz.destroy');
+	Route::post('quiz/{id}/destroy', 'QuizController@destroyQuiz')->name('quiz.delete');
 	Route::get('quiz/edit/{id}', 'QuizController@edit')->name('quiz.edit');
 	Route::get('quiz/start/{id}', 'QuizController@startQuiz')->name('quiz.start');
 	Route::get('quiz/refresh', 'QuizController@refresh')->name('quiz.refresh');
+	Route::get('quiz/deleted', 'QuizController@deleted')->name('quiz.deleted');
 	Route::post('quiz/update/{id}', 'QuizController@update')->name('quiz.update');
 	Route::post('quiz/cancel/{id}', 'QuizController@cancel')->name('quiz.cancel');
 	Route::post('quiz/attempt', 'QuizController@attempt')->name('quiz.attempt');

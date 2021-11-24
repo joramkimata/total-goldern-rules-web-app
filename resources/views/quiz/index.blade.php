@@ -14,22 +14,32 @@
 </script>
 @endif
 
+@if(session()->has('error'))
+<div class="alert alert-danger flush">
+    <i class="fa fa-check"></i> {{session()->get('error')}}
+</div>
+<script src="{{url('js/jquery.min.js')}}"></script>
+<script type="text/javascript">
+    $('.flush').delay(5000).fadeOut();
+</script>
+@endif
+
 <div class="page-class">
 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addQuizModal"><i class="fa fa-plus"></i> Add New Quiz</button>
 	<div class="mt-3">
 		<table id="dataTable_quiz" class="table table-striped table-bordered">
-			<thead>
-				<tr>
+			<thead style="background: #666; color: #FFF; ">
+				<tr  >
 					<th>#</th>
-					<th>Quiz Name</th>
-					<th>No. of Questions</th>
-					<th>No. of Questions Added</th>
-                    <th>Creation Status</th>
-                    <th>Quiz Published ?</th>
-                    <th>Quiz Results Published ?</th>
-					<th>Manage Quiz</th>
-					<th>Quiz Questions</th>
-					<th>Quiz Report</th>
+					<th style="font-size: 12px">Quiz Name</th>
+					<th style="font-size: 12px">Added Questions </th>
+                    <th style="font-size: 12px">Creation</th>
+                    <th style="font-size: 12px">Still in Quiz Time</th>
+                    <th style="font-size: 12px">Published</th>
+                    <th style="font-size: 12px">Results Out</th>
+					<th style="font-size: 12px">Manage</th>
+					<th style="font-size: 12px">Questions</th>
+					<th style="font-size: 12px">Report</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -41,36 +51,48 @@
 				<tr>
 					<td>{{$i}}</td>
 					<td>{{$q->quiz_name}}</td>
-					<td>{{$q->questions_no}}</td>
-                    <td>{{\App\Question::where('quiz_id', $q->id)->count()}}</td>
+                    <td>{{\App\Question::where('quiz_id', $q->id)->count()}} / {{$q->questions_no}}</td>
                     <td>
                     	@if($q->questions_no == \App\Question::where('quiz_id', $q->id)->count())
-                    		<span class=" alert-success">Completed</span>
+                    		<span class="badge badge-success">Completed</span>
                     	@else
-                    		<span class=" alert-warning">In-Completed</span>
+                    		<span class="badge badge-warning">In-Completed</span>
                     	@endif
                     	
                     </td>
-					<td>{!!$q->status == 1 ? '<label class="alert-success">YES</label>' : '<label class="alert-danger">NO</label>'!!}</td>
+                    <td>{!!$q->quiz_status == 'EXECUTION_STARTED' ? '<label class="badge badge-success">YES</label>' : '<label class="badge badge-danger">NO</label>'!!}</td>
+					<td>{!!$q->is_published == 1 ? '<label class="badge badge-success">YES</label>' : '<label class="badge badge-danger">NO</label>'!!}</td>
 					<td>
-						@if(\App\Quizfeedback::where('quiz_id', $q->id)->where('published',1)->count() > 0)
-							<label class="alert-success">YES</label>
-						@elseif(\App\Quizfeedback::where('quiz_id', $q->id)->where('published',0)->count() > 0)
-							<label class="alert-danger">NO</label>
+						@if($q->quiz_status == 'RESULTS_OUT')
+							<span class="badge badge-success">YES</span>
 						@else
-							<label>--</label>
+							<span class="badge badge-danger">NO</span>
 						@endif
 
 					</td>
 					<td>
-						<button 
+
+					     @if($q->quiz_status == 'DRAFTED')
+						<button
+						    title="Edit Quiz"
 							class="btn btn-primary btn-sm editQuiz" 
                             data-toggle="modal" 
                             route="{{route('quiz.edit', $q->id)}}"
 							data-target="#quizModal" 
 							data-quiz_questions_number="5">
-							<i class="fa fa-edit"></i> Edit Quiz
+							<i class="fa fa-edit"></i>
 						</button>
+						<button
+                            title="Delete Quiz"
+                            route="{{route('quiz.delete', $q->id)}}"
+                            class="btn btn-danger btn-sm deleteQuiz"
+                        >
+                            <i class="fa fa-trash"></i>
+                        </button>
+                        @else
+                            ---
+                        @endif
+
 					</td>
 					<td>
 						@if($q->questions_no == \App\Question::where('quiz_id', $q->id)->count())
@@ -83,27 +105,31 @@
                     		<button 
                             class="btn btn-primary btn-sm addQns" 
                             route="{{route('quiz.add.questions', $q->id)}}"
-							data-toggle="modal" 
+							data-toggle="modal"
+							title="Add Questions"
 							data-target="#questionModal" 
-							><i class="fa fa-plus"></i> Add Questions
+							><i class="fa fa-plus"></i>
 						</button>
                     	@endif
 						
-						<button 
+						<button
+						    title="View Questions"
 							class="btn btn-danger btn-sm previewQuiz" 
 							data-toggle="modal" 
 							route="{{route('quiz.preview.questions', $q->id)}}"
 							data-target="#viewQuestionModal" 
-							><i class="fa fa-list"></i> View Questions
+							><i class="fa fa-list"></i>
 						</button>
 					</td>
 					<td>
-						<button 
-							class="btn btn-primary btn-sm reportQuiz" 
+						<button
+						    title="View Report"
+							class="btn btn-success btn-sm reportQuiz"
 							data-toggle="modal" 
 							route="{{route('quiz.report', $q->id)}}"
 							data-target="#reportModal" 
-							>View Report
+							>
+							<i class="fa fa-file"></i>
 						</button>
 					</td>
                 </tr>
@@ -279,6 +305,28 @@ function processAddQuiz() {
 
 	$(document).ready(function () {
 
+
+	    $('body').on('click', '.deleteQuiz', function() {
+            var route = $(this).attr('route');
+
+            swal({
+              title: "You are about to delete quiz!",
+              text: "",
+              type: "info",
+              showCancelButton: true,
+              closeOnConfirm: true,
+              showLoaderOnConfirm: false
+            }, function () {
+
+                var data = {
+                    _token: '{{csrf_token()}}'
+                }
+
+                Biggo.talkToServer(route, data).then(function(res){
+                    window.location = '{{route("quiz.deleted")}}';
+                });
+            });
+	    });
 
 		$('body').on('click', '#attachPhoto', function() {
 			$("#attachedPhoto").click();
