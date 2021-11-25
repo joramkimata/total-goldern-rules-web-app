@@ -534,25 +534,50 @@
                     var isFileUpload = false;
                     var formdata;
 
-                    if (Biggo.isFileValueSetted(attachedPhotoEdit) != undefined) {
-                        var arr = Biggo.serializeData(editQuestionFormX);
-                        arr.push({name: "answers", value: JSON.stringify(answersX)});
-                        arr.push({name: "_token", value: '<?php echo e(csrf_token()); ?>'})
-                        var arr2 = ["attachedPhotoEdit"];
-                        isFileUpload = true;
-                        formdata = Biggo.prepareFormData(arr, arr2);
-                    } else {
-                        formdata = Biggo.serializeData(editQuestionFormX);
-                        formdata.push({name: "_token", value: '<?php echo e(csrf_token()); ?>'});
-                        formdata.push({name: "answers", value: JSON.stringify(answersX)});
+                    try {
+                        if (Biggo.isFileValueSetted(attachedPhotoEdit) != undefined) {
+                            var arr = Biggo.serializeData(editQuestionFormX);
+                            arr.push({name: "answers", value: JSON.stringify(answersX)});
+                            arr.push({name: "_token", value: '<?php echo e(csrf_token()); ?>'})
+                            var arr2 = ["attachedPhotoEdit"];
+                            isFileUpload = true;
+                            formdata = Biggo.prepareFormData(arr, arr2);
+                        } else {
+                            formdata = Biggo.serializeData(editQuestionFormX);
+                            formdata.push({name: "_token", value: '<?php echo e(csrf_token()); ?>'});
+                            formdata.push({name: "answers", value: JSON.stringify(answersX)});
+                        }
+                    }catch (e) {
+                        if (Biggo.isFileValueSetted(attachPhotoEditXjx) != undefined) {
+                            var arr = Biggo.serializeData(editQuestionFormX);
+                            arr.push({name: "answers", value: JSON.stringify(answersX)});
+                            arr.push({name: "_token", value: '<?php echo e(csrf_token()); ?>'})
+                            var arr2 = ["attachPhotoEditXjx"];
+                            isFileUpload = true;
+                            formdata = Biggo.prepareFormData(arr, arr2);
+                        } else {
+                            formdata = Biggo.serializeData(editQuestionFormX);
+                            formdata.push({name: "_token", value: '<?php echo e(csrf_token()); ?>'});
+                            formdata.push({name: "answers", value: JSON.stringify(answersX)});
+                        }
                     }
 
 
-                    console.log(formdata);
 
                     var route = $(this).attr('route');
+                    var qn = $(this).attr('qn');
 
-                    var biggo = Biggo.talkToServer(route, formdata, isFileUpload);
+                    Biggo.talkToServer(route, formdata, isFileUpload).then(function (res) {
+
+                            swal({
+                                title: "Successfully updated",
+                                text: ""
+                            }, function () {
+                                $('#qn' + qn).css('opacity', 1).css('backgroundColor', '#f5f5f5');
+                                $('#qn' + qn).html(res);
+                            });
+                        }
+                    );
 
                 }
 
@@ -1179,7 +1204,8 @@
                 });
             });
             /************************************* End Select Radio Or Checkbox *******************************/
-        });
+        })
+        ;
     </script>
 <?php $__env->stopSection(); ?>
 

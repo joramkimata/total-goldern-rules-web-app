@@ -135,6 +135,11 @@ class QuestionController extends Controller
             $qn->qn_photo_location =  \App\HelperX::uplodFileThenReturnPath('attachedPhotoEdit');
         }
 
+        if(request()->hasFile('attachPhotoEditXjx')) {
+            //let us upload photo
+            $qn->qn_photo_location =  \App\HelperX::uplodFileThenReturnPath('attachPhotoEditXjx');
+        }
+
         $qn->save();
 
         Answer::where('question_id', $id)->delete();
@@ -150,10 +155,10 @@ class QuestionController extends Controller
             $anw->save();
         }
 
+        $quizid = $qn->quiz_id;
 
+        return view('quiz.questionsEditX', compact('id', 'quizid'));
 
-
-        return dd(request()->all());
     }
 
 }
