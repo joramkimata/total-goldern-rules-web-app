@@ -44,7 +44,6 @@
                             Attach Photo
                         </button>
                         <input id="attachedPhotoEdit" type="file" name="attachedPhotoEdit" hidden/>
-
                     </div>
                 </div>
                 <div id="photoAttachmentEdit"></div>
@@ -92,11 +91,11 @@
 
                 @if($q->category == "single")
                     <div class="" style="display: flex; justify-content: space-between;" id="answerDel{{$a->id}}">
-                        <input type="checkbox" style="display: none" class=""/>
-                        <input type="radio" {!! $checked !!} name="customRadio_{{$q->id}}" class="editRadioAnswer">
+                        <input type="checkbox" style="display: none" id="multiple{{$a->id}}" class="multiple"/>
+                        <input type="radio" id="single{{$a->id}}"  {!! $checked !!} name="customRadio_{{$q->id}}" class="editRadioAnswer single">
                         <label style="width: 100%" class="{{ $a->correct == 0 ? '' : 'text-success' }}"
                                for="question{{$q->id}}_answer{{$a->id}}">
-                            <textarea class="form-control" rows="2">{{$a->answer}}</textarea><br/>
+                            <textarea aid="{{$a->id}}" class="form-control singleX multipleX" rows="2">{{$a->answer}}</textarea><br/>
                         </label>
                         <span class="deleteEditAnwr" routeEd="{{route('question.edit', $id)}}"
                               qn={{$id}} aid="{{$a->id}}"
@@ -107,12 +106,12 @@
                 @endif
                 @if($q->category == "multiple")
                     <div class="" style="display: flex; justify-content: space-between;" id="answerDel{{$a->id}}">
-                        <input class="single" style="display: none" type="radio"/>
+                        <input class="single" name="customRadio_{{$q->id}}" id="single{{$a->id}}"  style="display: none" type="radio"/>
                         <input type="checkbox" id="multiple{{$a->id}}" class="multiple"
                                {!! $checked !!} id="question{{$q->id}}_answer{{$a->id}}">
                         <label style="width: 100%" class="{{ $a->correct == 0 ? '' : 'text-success' }}"
                                for="question{{$q->id}}_answer{{$a->id}}">
-                            <textarea aid="{{$a->id}}" class="form-control multipleX" rows="2">{{$a->answer}}</textarea><br/>
+                            <textarea aid="{{$a->id}}" class="form-control singleX multipleX" rows="2">{{$a->answer}}</textarea><br/>
                         </label>
                         <span class="deleteEditAnwr" routeEd="{{route('question.edit', $id)}}"
                               qn={{$id}} aid="{{$a->id}}"

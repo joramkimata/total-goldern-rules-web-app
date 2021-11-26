@@ -337,10 +337,11 @@
 
                 var i = parseInt($('#answersAreaX').attr('i'));
 
+
                 if (answerType === "single") {
                     i++;
                     var add_answer_input = $('input.add-answer-input').val();
-                    $("#answersAreaX").append('<div  class="custom-control custom-radio"><input type="radio" id="customRadio' + i + '" name="customRadio" abody="' + add_answer_input + '" class="custom-control-input singleAnswerItem"><label class="custom-control-label removeAnswer" title="Double click to remove from list" style="cursor: pointer" for="customRadio' + i + '">' + add_answer_input + '</label></div><hr/>');
+                    $("#answersAreaX").append('<div id="answerDel' + i + '" style="display: flex; justify-content: space-between" class=""><input class="multiple" style="display: none" type="checkbox"/><input type="radio" id="customRadio' + i + '" name="customRadio" abody="' + add_answer_input + '" class="singleAnswerItem single"><textarea aid="' + i + '" class="form-control singleX" rows="2" >' + add_answer_input + '</textarea><i aid="' + i + '"  style="margin-left: 12px;cursor: pointer;" class="fa fa-trash text-danger deleteEditAnwr"></i></div><hr/>');
                     $('input.add-answer-input').val('');
 
                 } else {
@@ -473,6 +474,7 @@
             });
 
             $('body').on('click', '.updateQn', function () {
+
                 var editXQn = $('#editXQn').val();
                 if (editXQn == "") {
                     $('#editXQn').css('border', '1px solid red');
@@ -483,10 +485,9 @@
 
                 var answerTypeEdit = $('#answerTypeEdit').val();
 
+                var answersX = []
 
                 if (answerTypeEdit == 'multiple') {
-
-                    var answersX = []
 
                     $('.multipleX').each(function (i, k) {
                         var v = $(k).val();
@@ -503,7 +504,6 @@
                             answersX.push(data)
                         }
                     });
-
 
                     const ans = $('.multipleX').length;
 
@@ -523,83 +523,110 @@
 
                         if (!bag.includes(true)) {
                             swal({
-                                title: "Please check atleast one correct answer",
+                                title: "Please check at least one correct answer",
                                 text: ""
                             });
                             return;
                         }
                     }
 
-                    var isFileUpload = false;
-                    var formdata;
+                }else {
+                    //
 
-                    try {
-                        if (Biggo.isFileValueSetted(attachedPhotoEdit) != undefined) {
-                            var arr = Biggo.serializeData(editQuestionFormX);
-                            arr.push({name: "answers", value: JSON.stringify(answersX)});
-                            arr.push({name: "_token", value: '{{csrf_token()}}'})
-                            var arr2 = ["attachedPhotoEdit"];
-                            isFileUpload = true;
-                            formdata = Biggo.prepareFormData(arr, arr2);
+                    $('.singleX').each(function (i, k) {
+                        var v = $(k).val();
+                        var aid = $(k).attr('aid');
+                        if (v == "") {
+                            $(k).css('border', '1px solid red');
                         } else {
-                            formdata = Biggo.serializeData(editQuestionFormX);
-                            formdata.push({name: "_token", value: '{{csrf_token()}}'});
-                            formdata.push({name: "answers", value: JSON.stringify(answersX)});
+                            $(k).css('border', '');
+                            var caid = $('#single' + aid).is(':checked');
+                            var data = {
+                                body: v,
+                                correct: caid
+                            };
+                            answersX.push(data)
                         }
-                    }catch (e) {
-                        if (Biggo.isFileValueSetted(attachPhotoEditXjx) != undefined) {
-                            var arr = Biggo.serializeData(editQuestionFormX);
-                            arr.push({name: "answers", value: JSON.stringify(answersX)});
-                            arr.push({name: "_token", value: '{{csrf_token()}}'})
-                            var arr2 = ["attachPhotoEditXjx"];
-                            isFileUpload = true;
-                            formdata = Biggo.prepareFormData(arr, arr2);
-                        } else {
-                            formdata = Biggo.serializeData(editQuestionFormX);
-                            formdata.push({name: "_token", value: '{{csrf_token()}}'});
-                            formdata.push({name: "answers", value: JSON.stringify(answersX)});
+                    });
+
+                    const ans = $('.singleX').length;
+
+                    if (ans == 0) {
+                        swal({
+                            title: "Please provide answers",
+                            text: ""
+                        });
+                        return;
+                    } else {
+                        var bag = []
+
+                        $('.single').each(function (i, k) {
+                            var ck = $(k).is(":checked");
+                            bag.push(ck)
+                        });
+
+                        if (!bag.includes(true)) {
+                            swal({
+                                title: "Please select correct answer",
+                                text: ""
+                            });
+                            return;
                         }
                     }
 
+                }
 
+                var isFileUpload = false;
+                var formdata;
 
-                    var route = $(this).attr('route');
-                    var qn = $(this).attr('qn');
-
-                    Biggo.talkToServer(route, formdata, isFileUpload).then(function (res) {
-
-                            swal({
-                                title: "Successfully updated",
-                                text: ""
-                            }, function () {
-                                $('#qn' + qn).css('opacity', 1).css('backgroundColor', '#f5f5f5');
-                                $('#qn' + qn).html(res);
-                            });
-                        }
-                    );
-
+                try {
+                    if (Biggo.isFileValueSetted(attachedPhotoEdit) != undefined) {
+                        var arr = Biggo.serializeData(editQuestionFormX);
+                        arr.push({name: "answers", value: JSON.stringify(answersX)});
+                        arr.push({name: "_token", value: '{{csrf_token()}}'})
+                        var arr2 = ["attachedPhotoEdit"];
+                        isFileUpload = true;
+                        formdata = Biggo.prepareFormData(arr, arr2);
+                    } else {
+                        formdata = Biggo.serializeData(editQuestionFormX);
+                        formdata.push({name: "_token", value: '{{csrf_token()}}'});
+                        formdata.push({name: "answers", value: JSON.stringify(answersX)});
+                    }
+                }catch (e) {
+                    if (Biggo.isFileValueSetted(attachPhotoEditXjx) != undefined) {
+                        var arr = Biggo.serializeData(editQuestionFormX);
+                        arr.push({name: "answers", value: JSON.stringify(answersX)});
+                        arr.push({name: "_token", value: '{{csrf_token()}}'})
+                        var arr2 = ["attachPhotoEditXjx"];
+                        isFileUpload = true;
+                        formdata = Biggo.prepareFormData(arr, arr2);
+                    } else {
+                        formdata = Biggo.serializeData(editQuestionFormX);
+                        formdata.push({name: "_token", value: '{{csrf_token()}}'});
+                        formdata.push({name: "answers", value: JSON.stringify(answersX)});
+                    }
                 }
 
 
 
-                {{--var route = $(this).attr('route');--}}
-                {{--alert(route);--}}
-                {{--var qn = $(this).attr('qn');--}}
-                {{--var quizid = $(this).attr('quizid');--}}
-                {{--var formdata = $('#updateQnForm').serializeArray();--}}
-                {{--alert(formdata)--}}
-                {{--var data = {--}}
-                {{--    _token: '{{csrf_token()}}',--}}
-                {{--    quizid: quizid,--}}
-                {{--    qndata: formdata--}}
-                {{--};--}}
+                var route = $(this).attr('route');
+                var qn = $(this).attr('qn');
 
-                {{--$('#qn' + qn).css('opacity', 0.2).css('backgroundColor', '');--}}
+                Biggo.talkToServer(route, formdata, isFileUpload).then(function (res) {
 
-                {{--Biggo.talkToServer(route, data).then(function (res) {--}}
-                {{--    $('#qn' + qn).css('opacity', 1).css('backgroundColor', '#f5f5f5');--}}
-                {{--    $('#qn' + qn).html(res);--}}
-                {{--});--}}
+                        swal({
+                            title: "Successfully updated",
+                            text: ""
+                        }, function () {
+                            $('#qn' + qn).css('opacity', 1).css('backgroundColor', '#f5f5f5');
+                            $('#qn' + qn).html(res);
+                        });
+                    }
+                );
+
+
+
+
             });
 
             $('body').on('click', '.editQn', function () {
@@ -754,7 +781,7 @@
                 if (answerType === "single") {
                     i++;
                     var add_answer_input = $('input.add-answer-input').val();
-                    $("#answersArea").append('<div  class="custom-control custom-radio"><input type="radio" id="customRadio' + i + '" name="customRadio" abody="' + add_answer_input + '" class="custom-control-input singleAnswerItem"><label class="custom-control-label removeAnswer" title="Double click to remove from list" style="cursor: pointer" for="customRadio' + i + '">' + add_answer_input + '</label></div><hr/>');
+                    $("#answersArea").append('<div style="display: flex; justify-content: space-between; font-size: 2rem"  class="custom-control custom-radio"><input type="radio" id="customRadio' + i + '" name="customRadio" abody="' + add_answer_input + '" class="custom-control-input singleAnswerItem"><label class="custom-control-label removeAnswer" title="Double click to remove from list" style="cursor: pointer" for="customRadio' + i + '">' + add_answer_input + '</label><i style="cursor: pointer" class="fa fa-trash text-danger removeAnswerXt"></i></div><hr/>');
                     $('input.add-answer-input').val('');
 
                 } else {

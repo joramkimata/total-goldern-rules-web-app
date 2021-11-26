@@ -44,7 +44,6 @@
                             Attach Photo
                         </button>
                         <input id="attachedPhotoEdit" type="file" name="attachedPhotoEdit" hidden/>
-
                     </div>
                 </div>
                 <div id="photoAttachmentEdit"></div>
@@ -92,11 +91,11 @@
 
                 <?php if($q->category == "single"): ?>
                     <div class="" style="display: flex; justify-content: space-between;" id="answerDel<?php echo e($a->id); ?>">
-                        <input type="checkbox" style="display: none" class=""/>
-                        <input type="radio" <?php echo $checked; ?> name="customRadio_<?php echo e($q->id); ?>" class="editRadioAnswer">
+                        <input type="checkbox" style="display: none" id="multiple<?php echo e($a->id); ?>" class="multiple"/>
+                        <input type="radio" id="single<?php echo e($a->id); ?>"  <?php echo $checked; ?> name="customRadio_<?php echo e($q->id); ?>" class="editRadioAnswer single">
                         <label style="width: 100%" class="<?php echo e($a->correct == 0 ? '' : 'text-success'); ?>"
                                for="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>">
-                            <textarea class="form-control" rows="2"><?php echo e($a->answer); ?></textarea><br/>
+                            <textarea aid="<?php echo e($a->id); ?>" class="form-control singleX multipleX" rows="2"><?php echo e($a->answer); ?></textarea><br/>
                         </label>
                         <span class="deleteEditAnwr" routeEd="<?php echo e(route('question.edit', $id)); ?>"
                               qn=<?php echo e($id); ?> aid="<?php echo e($a->id); ?>"
@@ -107,12 +106,12 @@
                 <?php endif; ?>
                 <?php if($q->category == "multiple"): ?>
                     <div class="" style="display: flex; justify-content: space-between;" id="answerDel<?php echo e($a->id); ?>">
-                        <input class="single" style="display: none" type="radio"/>
+                        <input class="single" name="customRadio_<?php echo e($q->id); ?>" id="single<?php echo e($a->id); ?>"  style="display: none" type="radio"/>
                         <input type="checkbox" id="multiple<?php echo e($a->id); ?>" class="multiple"
                                <?php echo $checked; ?> id="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>">
                         <label style="width: 100%" class="<?php echo e($a->correct == 0 ? '' : 'text-success'); ?>"
                                for="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>">
-                            <textarea aid="<?php echo e($a->id); ?>" class="form-control multipleX" rows="2"><?php echo e($a->answer); ?></textarea><br/>
+                            <textarea aid="<?php echo e($a->id); ?>" class="form-control singleX multipleX" rows="2"><?php echo e($a->answer); ?></textarea><br/>
                         </label>
                         <span class="deleteEditAnwr" routeEd="<?php echo e(route('question.edit', $id)); ?>"
                               qn=<?php echo e($id); ?> aid="<?php echo e($a->id); ?>"
