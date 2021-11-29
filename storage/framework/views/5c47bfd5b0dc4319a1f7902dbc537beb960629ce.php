@@ -62,7 +62,7 @@
                             <?php endif; ?>
 
                         </td>
-                        <td><?php echo $q->quiz_status == 'EXECUTION_DONE' ? '<label class="badge badge-success">YES</label>' : '<label class="badge badge-danger">NO</label>'; ?></td>
+                        <td><?php echo $q->quiz_status == 'EXECUTION_STARTED' ? '<label class="badge badge-success">YES</label>' : '<label class="badge badge-danger">NO</label>'; ?></td>
                         <td><?php echo $q->is_published == 1 ? '<label class="badge badge-success">YES</label>' : '<label class="badge badge-danger">NO</label>'; ?></td>
                         <td>
                             <?php if($q->quiz_status == 'RESULTS_OUT'): ?>

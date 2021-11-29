@@ -43,22 +43,23 @@ function ansx($id) {
 	</div>
 	<div class="d-flex justify-content-between align-items-center pt-5">
 		<h5 class="quiz-name-title" id="userModalLabel"><i class="fa fa-list"></i> View Quiz Results</h5>
-		<h5>Point: {{myscore($id, $uxid)}} out of {{ansx($id)}}</h5>
+		<h5>Point: <?php echo e(myscore($id, $uxid)); ?> out of <?php echo e(ansx($id)); ?></h5>
 	</div>
 </div>
 
 <div class="modal-body">
 
-	@foreach($questions as $q)
-	<fieldset class="mb-3" id="qn{{$q->id}}">
-		<h5 class="d-flex"><span class="question-number">{{$q->qn_no < 10 ? '0'.$q->qn_no : $q->qn_no}}.</span> <span>
-			{{$q->question}}
+	<?php $__currentLoopData = $questions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $q): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+	<fieldset class="mb-3" id="qn<?php echo e($q->id); ?>">
+		<h5 class="d-flex"><span class="question-number"><?php echo e($q->qn_no < 10 ? '0'.$q->qn_no : $q->qn_no); ?>.</span> <span>
+			<?php echo e($q->question); ?>
+
 		</span></h5>
 		<div class="answers-option ml-5 ">
 			<?php
 				$answers = \App\Answer::where('question_id', $q->id)->get();
 			?>
-			@foreach($answers as $a)
+			<?php $__currentLoopData = $answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $a): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
 			<?php 
 
@@ -79,7 +80,7 @@ function ansx($id) {
 
 			?>
 
-			@if($q->category == "single")
+			<?php if($q->category == "single"): ?>
 
 			<?php
 				if($a->correct == 0) {
@@ -91,11 +92,11 @@ function ansx($id) {
 
 
 			<div class="custom-control custom-checkbox">
-				<input disabled="true" type="checkbox" id="question{{$q->id}}_answer_{{$a->id}}_single" {!! $checked !!} name="customRadio_{{$a->id}}" class="custom-control-input">
-				<label class="custom-control-label" for="question{{$q->id}}_answer{{$a->id}}">{{$a->answer}} - {!!$corrX!!}</label>
+				<input type="checkbox" id="question<?php echo e($q->id); ?>_answer_<?php echo e($a->id); ?>_single" <?php echo $checked; ?> name="customRadio_<?php echo e($a->id); ?>" class="custom-control-input">
+				<label class="custom-control-label" for="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>"><?php echo e($a->answer); ?> - <?php echo $corrX; ?></label>
 			</div>
-			@endif
-			@if($q->category == "multiple")
+			<?php endif; ?>
+			<?php if($q->category == "multiple"): ?>
 			<?php
 				if($a->correct == 0) {
 					$corrX = " <b>(WRONG)</b>";
@@ -104,16 +105,16 @@ function ansx($id) {
 				}
 			?>
 			<div class="custom-control custom-checkbox">
-				<input type="checkbox" disabled="true" class="custom-control-input" {!! $checked !!} id="question{{$q->id}}_answer{{$a->id}}">
-				<label class="custom-control-label" for="question{{$q->id}}_answer{{$a->id}}">{{$a->answer}} - {!!$corrX!!}</label>
+				<input type="checkbox" class="custom-control-input" <?php echo $checked; ?> id="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>">
+				<label class="custom-control-label" for="question<?php echo e($q->id); ?>_answer<?php echo e($a->id); ?>"><?php echo e($a->answer); ?> - <?php echo $corrX; ?></label>
 			</div>
-			@endif
-			@endforeach
+			<?php endif; ?>
+			<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-			@if($q->qn_photo_location != "")
+			<?php if($q->qn_photo_location != ""): ?>
 				<br/>
-				<img src="{{$q->qn_photo_location}}" style="width: 450px" />
-			@endif
+				<img src="<?php echo e($q->qn_photo_location); ?>" style="width: 450px" />
+			<?php endif; ?>
 			
 			
 		
@@ -123,7 +124,7 @@ function ansx($id) {
 	<hr>
 	<br/>
 	<?php $i++; ?>
-	@endforeach
+	<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 	
 	

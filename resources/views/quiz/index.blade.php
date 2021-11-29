@@ -62,7 +62,7 @@
                             @endif
 
                         </td>
-                        <td>{!!$q->quiz_status == 'EXECUTION_DONE' ? '<label class="badge badge-success">YES</label>' : '<label class="badge badge-danger">NO</label>'!!}</td>
+                        <td>{!!$q->quiz_status == 'EXECUTION_STARTED' ? '<label class="badge badge-success">YES</label>' : '<label class="badge badge-danger">NO</label>'!!}</td>
                         <td>{!!$q->is_published == 1 ? '<label class="badge badge-success">YES</label>' : '<label class="badge badge-danger">NO</label>'!!}</td>
                         <td>
                             @if($q->quiz_status == 'RESULTS_OUT')

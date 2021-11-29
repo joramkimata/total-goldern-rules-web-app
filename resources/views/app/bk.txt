@@ -1,0 +1,117 @@
+ <?php
+                $quizes = \App\Quiz::where('is_published', 1)->get();
+
+                $i = 0;
+
+                function myscore($quid)
+                {
+                    return \DB::table('answers')->join('attempts', 'attempts.aid', '=', 'answers.id')
+                        ->select('*')
+                        ->where('attempts.quiz_id', $quid)->where('answers.correct', 1)
+                        ->where('attempts.user_id', auth()->user()->id)
+                        ->count();
+                }
+
+
+                function ansx($id)
+                {
+                    return \DB::table('answers')->join('questions', 'questions.id', '=', 'answers.question_id')->select('*')->where('questions.quiz_id', $id)->where('answers.correct', 1)->count();
+                }
+
+
+                function rankMe($quid)
+                {
+                    $r = 1;
+
+                    foreach (\App\User::where('role_id', 2)->get() as $u) {
+                        $rank = \DB::table('answers')->join('attempts', 'attempts.aid', '=', 'answers.id')
+                            ->select('*')
+                            ->where('attempts.quiz_id', $quid)->where('answers.correct', 1)
+                            ->where('attempts.user_id', $u->id)
+                            ->count();
+                        $ranks[$u->id] = $r;
+                        $r++;
+                    }
+
+                    arsort($ranks);
+
+                    return $ranks[auth()->user()->id] . "/" . \App\User::where('role_id', 2)->count();
+                }
+
+
+
+                ?>
+                @if(count($quizes))
+                    @foreach($quizes as $q)
+                        <?php
+
+                        //$c = \App\Quizfeedback::where('quiz_id', $q->id)->where('published', 1)->count(); //\App\Quizfeedback::where('user_id', auth()->user()->id)->where('quiz_id', $q->id)->where('seen', 0)->get();
+
+                        $c = \App\Quiz::where('id', $q->id)->where('quiz_status', 'RESULTS_OUT')->count();
+
+                        $c1 = \App\Quizfeedback::where('quiz_id', $q->id)->where('published', 1)->where('user_id', auth()->user()->id)->count();
+
+                        $c2 = \App\Attempt::where('quiz_id', $q->id)->where('user_id', auth()->user()->id)->count();
+
+                        //$c2 = \App\Quiz::where('id', $q->id)->where('quiz_status', 'EXECUTION_STARTED')->count();
+
+                        ?>
+                        @if($c2 == 0)
+                            <?php $i++; ?>
+                            <div class="col-md-4">
+                                <div class="card card-dashboard">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <div class="card-icon flex-shrink-0">
+                                            <i class="fas fa-tasks fa-3x"></i>
+                                        </div>
+                                        <div class="card-details">
+                                            <p class="card-category m-0">{{$q->quiz_name}}</p>
+                                            <p class="card-category m-0">{{$q->description}}</p>
+                                            <p class="card-category m-0">Questions: [{{$q->questions_no}}]</p>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <i class="fas fa-tasks"></i>
+                                        <a href="{{route('quiz.start', $q->id)}}">Start Quiz</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if($c == 1 )
+                            <?php $i++; ?>
+                            <div class="col-md-4 ">
+                                <div class="card card-dashboard alert alert-success">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <div class="card-icon flex-shrink-0">
+                                            <i class="fas fa-trophy fa-3x"></i>
+                                        </div>
+                                        <div class="card-details">
+                                            <p class="card-category m-0">{{$q->quiz_name}}</p>
+                                            <hr/>
+                                            <p class="card-category m-0">{{$q->description}}</p>
+                                            <p class="card-category m-0">Questions: [{{$q->questions_no}}]</p>
+                                            <p class="card-category m-0 text-danger">Score: [{{myscore($q->id)}}
+                                                /{{ansx($q->id)}}]</p>
+                                            <p class="card-category m-0 text-info">Rank: [{{ rankMe($q->id) }}]</p>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <i class="fas fa-tasks"></i>
+                                        <a style="cursor: pointer;" data-toggle="modal"
+                                           route="{{route('quiz.results.seen', $q->id)}}"
+                                           data-target="#userModalQuizResults" class="viewResultx">View Results</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @else
+                    <div class="col-md-12 alert alert-warning"><i class="fa fa-file"></i> You dont have any quiz right
+                        now!
+                    </div>
+                @endif
+                @if($i == 0)
+                    <div class="col-md-12 alert alert-warning"><i class="fa fa-file"></i> Welcome
+                        to {{\App\HelperX::appName()}}!
+                    </div>
+                @endif

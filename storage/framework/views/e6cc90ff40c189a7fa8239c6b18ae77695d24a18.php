@@ -11,9 +11,10 @@
             <li><a class="d-flex align-items-center" href="<?php echo e(route('app.quiz')); ?>"><i class="mx-3 fas fa-newspaper"></i> <span class="sidebar_small-hide"> Quiz</span> </a></li>
             <li><a class="d-flex align-items-center" href="<?php echo e(route('app.departments')); ?>"><i class="mx-3 fas fa-th"></i> <span class="sidebar_small-hide"> Departments</span> </a></li>
             <li><a class="d-flex align-items-center" href="<?php echo e(route('app.reminders')); ?>"><i class="mx-3 fas fa-bell"></i> <span class="sidebar_small-hide"> Reminders </span> </a></li>
+                <li><a class="d-flex align-items-center" href="<?php echo e(route('app.reminders')); ?>"><i class="mx-3 fas fa-chart-bar"></i> <span class="sidebar_small-hide"> Reports </span> </a></li>
             <?php endif; ?>  
             <?php if(auth()->user()->role_id == 2): ?>           
-            <li><a class="d-flex align-items-center" href="<?php echo e(route('app.quiz.staff')); ?>"><i class="mx-3 fas fa-newspaper"></i> <span class="sidebar_small-hide"> Quiz</span> </a></li>
+            <li><a class="d-flex align-items-center" href="<?php echo e(route('app.quiz.staff')); ?>"><i class="mx-3 fas fa-newspaper"></i> <span class="sidebar_small-hide"> My Quizzes</span> </a></li>
             <?php endif; ?>
             <li><a class="d-flex align-items-center" href="<?php echo e(route('app.settings')); ?>"><i class="mx-3 fas fa-cogs"></i> <span class="sidebar_small-hide"> Setting</span> </a></li>
                        

@@ -20,7 +20,7 @@ class QuizController extends Controller
     public function startQuiz($id) {
         $quiz = Quiz::find($id);
         if($quiz){
-             if($quiz->status == 1){
+             if($quiz->is_published == 1 && $quiz->quiz_status == 'EXECUTION_STARTED'){
                 return view('quiz.start', compact('id'));
              }
              return redirect()->back()->with('error', 'Quiz is not yet published!');
@@ -48,10 +48,14 @@ class QuizController extends Controller
 
     public function publishResults($id) {
         //sleep(1);
-        $qf = \App\Quizfeedback::where('quiz_id', $id)->count();
-        if($qf > 0) {
 
-            \App\Quizfeedback::where('quiz_id', $id)->delete();
+        $quz = \App\Quiz::find($id);
+        $quz->quiz_status = 'RESULTS_OUT';
+        $quz->save();
+
+        $qf = \App\Quizfeedback::where('quiz_id', $id)->count();
+
+        if($qf == 0) {
             foreach (\App\User::where('role_id', 2)->get() as $u) {
                 $qfx = new \App\Quizfeedback;
                 $qfx->published = 1;
