@@ -332,10 +332,10 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <h1>Hello! </h1>
+                          <h1>Dear {{auth()->user()->email}} </h1>
                           <p>New Quiz was published !!</p>
-                          <p>You can now login to do the quiz!</p>
-                          <a href="http://quiz-app-total.herokuapp.com/activated" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
+                          <p>You can now start attempt!</p>
+                          <a href="{{\App\HelperX::appName()}}" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	box-shadow:inset 0px 1px 0px 0px #cf866c;
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d0451b), color-stop(1, #bc3315));
@@ -357,7 +357,7 @@ a {
 	font-size:13px;
 	padding:6px 24px;
 	text-decoration:none;
-	text-shadow:0px 1px 0px #854629;">Login Now</a>
+	text-shadow:0px 1px 0px #854629;">Start Quiz</a>
                           <p class="caption"></p>
                         </td>
                     </tr>
@@ -389,17 +389,9 @@ a {
             </td>
             <td class="subscription" width="300">
                 <div class="logo-image">
-                    <a href="https://total.co.tz" target="_blank"><img src="http://www.total.co.tz/cs/Total_NW/themes/cotoben_v4.2/img/header/logo_total.png" alt="logo-alt" width="70" height="70"></a>
+                    <a href="https://total.co.tz" target="_blank"><img src="https://totalenergies.co.tz/sites/all/themes/custom/totalenergy_theme/logo.png" alt="logo-alt" width="70" height="70"></a>
                 </div>
-                <p>
-                    <a class="strong block" href="#" target="_blank">
-                        Unsubscribe
-                    </a>
-                    <span class="hide">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                    <a class="strong block" href="#" target="_blank">
-                        Account Settings
-                    </a>
-                </p>
+
             </td>
         </tr>
         </tbody>

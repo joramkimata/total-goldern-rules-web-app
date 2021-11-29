@@ -83,8 +83,9 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::post('quiz/question/edit/{id}', 'QuestionController@edit')->name('question.edit');
 		Route::post('quiz/question/answer/delete/{id}', 'QuestionController@deleteAnswer')->name('question.answer.delete');
 
-		Route::post('quiz/question/update/{id}', 'QuestionController@updateQn')->name('question.update');
-	});	
+        Route::post('quiz/question/update/{id}', 'QuestionController@updateQn')->name('question.update');
+        Route::post('quiz/checkreminders', 'QuizController@checkreminders')->name('quiz.checkreminders');
+	});
 
 	Route::group(['middleware' => 'admin'], function() {
 		Route::get('app/departments', 'DepartmentController@index')->name('app.departments');

@@ -1,0 +1,8 @@
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=grquiz.totaltz@gmail.com
+MAIL_PASSWORD=wdmekkszcioevher
+MAIL_ENCRYPTION=tls
+
+Dont forget to run  php artisan config:cache

@@ -9,6 +9,11 @@ class HelperX {
         return $s->system_name;
     }
 
+    public static function baseUrl() {
+        $s = Setting::find(1);
+        return $s->base_url;
+    }
+
     public static function appLogo() {
         $s = Setting::find(1);
         if($s->logo == "") {
@@ -38,7 +43,7 @@ class HelperX {
         $data = array('fullname'=>auth()->user()->name, "email"=>auth()->user()->email, "error"=>$error);
     
         \Mail::send('emails.error_mail', $data, function($message) use ($data) {
-                $message->to('joramkimata@gmail.com', 'SYSTEM ADMIN')
+                $message->to('joramkimata@gmail.com', 'GOLDEN RULES TOTAL')
                         ->subject('[QUIZ APP ERROR]');
         });
     }
@@ -75,7 +80,7 @@ class HelperX {
             \Mail::send($view, $data, function($message) use ($data) {
                 $message->to($data["emails"])
                         ->subject($data["subject"]);
-                $message->from($data["admin"], 'SYSTEM ADMIN');
+                $message->from($data["admin"], 'GOLDEN RULES TOTAL');
             });
         }catch(Exception $e) {
             \App\HelperX::sendErrorMail($e->getMessage());
@@ -98,7 +103,7 @@ class HelperX {
             \Mail::send($view, $data, function($message) use ($data) {
                 $message->to($data["emails"])
                         ->subject($data["subject"]);
-                $message->from($data["admin"], 'SYSTEM ADMIN');
+                $message->from($data["admin"], 'GOLDEN RULES TOTAL');
             });
         }catch(Exception $e) {
             \App\HelperX::sendErrorMail($e->getMessage());

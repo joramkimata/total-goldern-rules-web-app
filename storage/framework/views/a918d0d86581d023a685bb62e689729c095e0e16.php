@@ -3,14 +3,14 @@
 <style>
 
 
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin,cyrillic);
+@import  url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin,cyrillic);
 
-@media only screen and (min-width: 0) {
+@media  only screen and (min-width: 0) {
     .wrapper {
         text-rendering: optimizeLegibility;
     }
 }
-@media only screen and (max-width: 620px) {
+@media  only screen and (max-width: 620px) {
     [class=wrapper] {
         min-width: 302px !important;
         width: 100% !important;
@@ -332,10 +332,10 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <h1>Dear {{auth()->user()->email}}! </h1>
-                          <p>Quiz was submited</p>
-                          <p>You can now login to view the quiz!</p>
-                          <a href="{{\App\HelperX::appName()}}" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
+                          <h1>Dear <?php echo e(auth()->user()->name); ?> </h1>
+                          <p>New Quiz was published !!</p>
+                          <p>You can now start attempt!</p>
+                          <a href="" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	box-shadow:inset 0px 1px 0px 0px #cf866c;
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d0451b), color-stop(1, #bc3315));
@@ -357,7 +357,7 @@ a {
 	font-size:13px;
 	padding:6px 24px;
 	text-decoration:none;
-	text-shadow:0px 1px 0px #854629;">Login Now</a>
+	text-shadow:0px 1px 0px #854629;">Start Quiz</a>
                           <p class="caption"></p>
                         </td>
                     </tr>
@@ -389,17 +389,9 @@ a {
             </td>
             <td class="subscription" width="300">
                 <div class="logo-image">
-                    <a href="https://total.co.tz" target="_blank"><img src="http://www.total.co.tz/cs/Total_NW/themes/cotoben_v4.2/img/header/logo_total.png" alt="logo-alt" width="70" height="70"></a>
+                    <a href="https://total.co.tz" target="_blank"><img src="https://totalenergies.co.tz/sites/all/themes/custom/totalenergy_theme/logo.png" alt="logo-alt" width="70" height="70"></a>
                 </div>
-                <p>
-                    <a class="strong block" href="#" target="_blank">
-                        Unsubscribe
-                    </a>
-                    <span class="hide">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                    <a class="strong block" href="#" target="_blank">
-                        Account Settings
-                    </a>
-                </p>
+                
             </td>
         </tr>
         </tbody>

@@ -3,14 +3,14 @@
 <style>
 
 
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin,cyrillic);
+@import  url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic&subset=latin,cyrillic);
 
-@media only screen and (min-width: 0) {
+@media  only screen and (min-width: 0) {
     .wrapper {
         text-rendering: optimizeLegibility;
     }
 }
-@media only screen and (max-width: 620px) {
+@media  only screen and (max-width: 620px) {
     [class=wrapper] {
         min-width: 302px !important;
         width: 100% !important;
@@ -332,10 +332,10 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <h1>Dear {{auth()->user()->email}}! </h1>
+                          <h1>Dear <?php echo e(auth()->user()->email); ?>! </h1>
                           <p>Quiz was submited</p>
                           <p>You can now login to view the quiz!</p>
-                          <a href="{{\App\HelperX::appName()}}" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
+                          <a href="<?php echo e(\App\HelperX::appName()); ?>" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	box-shadow:inset 0px 1px 0px 0px #cf866c;
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d0451b), color-stop(1, #bc3315));

@@ -67,7 +67,7 @@ class QuizController extends Controller
         }
 
         // Send Email
-       // \App\HelperX::sendEmails('emails.quizresults_mail', 'QUIZ RESULTS ARE OUT!');
+        \App\HelperX::sendEmails('emails.quizresults_mail', 'QUIZ RESULTS ARE OUT!');
     }   
 
     public function seenResults($id) {
@@ -77,6 +77,26 @@ class QuizController extends Controller
     public function seenXResults($id, $uxid) {
         
         return view('quiz.seenX', compact('id', 'uxid'));
+    }
+
+    public function checkreminders() {
+        $quizId = request('quizId');
+
+        $allusers = \App\User::where('role_id', 2)->where('active', 1)->get();
+        $attendes = \App\Quiztracker::where('quiz_id', $quizId)->get();
+
+        $none_attendes = [];
+
+        foreach ($allusers as $u) {
+            foreach ($attendes as $a) {
+                if($u->id != $a->user_id) {
+                    $none_attendes[] = $u;
+                }
+            }
+        }
+
+        return $none_attendes;
+
     }
 
     public function attempt() {
@@ -126,7 +146,7 @@ class QuizController extends Controller
 
        
         // Send Email to admins
-        //\App\HelperX::sendEmailTOAdmins();
+        \App\HelperX::sendEmailTOAdmins();
         
     }
 
@@ -162,7 +182,7 @@ class QuizController extends Controller
         $quiz->quiz_status = 'EXECUTION_STARTED';
         $quiz->save();
         // send Email here to every one
-        //\App\HelperX::sendEmails('emails.quizpublished_mail', 'NEW QUIZ PUBLISHED!');
+        \App\HelperX::sendEmails('emails.quizpublished_mail', 'NEW QUIZ PUBLISHED!');
     }
 
     public function cancel($id) {
