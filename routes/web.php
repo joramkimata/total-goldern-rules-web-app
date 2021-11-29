@@ -41,7 +41,10 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::post('/app/users/update/{id}/password', 'UserController@updatePassword')->name('users.update.password');
 		Route::post('/app/users/activate', 'UserController@activateAll')->name('app.users.activateAll');
 		Route::post('/app/user/activate', 'UserController@activateSingle')->name('app.users.activateSingle');
-		Route::get('/app/users/activate/refresh', 'UserController@activateAllRefresh')->name('app.users.activateAll.refresh');
+        Route::get('/app/users/activate/refresh', 'UserController@activateAllRefresh')->name('app.users.activateAll.refresh');
+        Route::get('/app/reports', 'ReportController@index')->name('app.reports');
+        Route::post('/app/reports', 'ReportController@fetchReport')->name('app.reports.fetch');
+        Route::post('/app/reports/view-staffs', 'ReportController@viewStaff')->name('app.reports.viewstaffs');
 	});
 	//Settings
 	Route::get('app/settings', 'SettingController@index')->name('app.settings');

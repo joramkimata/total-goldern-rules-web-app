@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Quiztracker;
 use Illuminate\Http\Request;
 use App\Quiz;
 use App\Question;
@@ -111,6 +112,17 @@ class QuizController extends Controller
             $att->quiz_id = $quiz_id;
             $att->save();   
         }
+
+        $tracker = new Quiztracker();
+        $tracker->user_id = auth()->user()->id;
+        $tracker->full_name = auth()->user()->name;
+        $tracker->quiz_id   =  $quiz_id;
+        $tracker->depart_id = auth()->user()->department->id;
+        $tracker->department_name = auth()->user()->department->name;
+        $tracker->month = date('n');
+        $tracker->year  = date('Y');
+        $tracker->save();
+
 
        
         // Send Email to admins
