@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\NewReminderEvent;
+use App\Events\PublishQuizResultsEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NewReminderListener implements ShouldQueue
+class PublishQuizResultsListener
 {
     /**
      * Create the event listener.
@@ -21,12 +21,13 @@ class NewReminderListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param NewReminderEvent $event
+     * @param  PublishQuizResultsEvent  $event
      * @return void
      */
-    public function handle(NewReminderEvent $event)
+    public function handle(PublishQuizResultsEvent $event)
     {
+        //
         // Send Email
-        \App\HelperX::sendReminders($event->view, $event->subject, $event->bod, $event->recipients);
+        \App\HelperX::sendEmails('emails.quizresults_mail', 'QUIZ RESULTS ARE OUT!');
     }
 }

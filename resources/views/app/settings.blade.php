@@ -145,6 +145,10 @@
 							<label for="email">System Name</label>
 							<input type="text" value="{{\App\HelperX::appName()}}" class="validate[required] form-control" data-errormessage-value-missing="App Name is required!"  id="appname" name="appname" />
 						</div>
+						<div class="form-group">
+							<label for="email">Base URL</label>
+							<input type="text" value="{{\App\HelperX::baseUrl()}}" class="validate[required] form-control" data-errormessage-value-missing="Base URL is required!"  id="base_url" name="base_url" />
+						</div>
 						<button type="submit" class="btn btn-primary btn-block px-5 py-2 mt-4">Submit</button>
 					</form>
 				</div>

@@ -96,8 +96,8 @@
                             />
 						</div>
 						<div class="form-group">
-							<label for="phone" class="col-form-label">Phone:</label>
-                            <input type="text" name="phone" class="validate[required] form-control" id="phone"
+							<label for="phone" class="col-form-label">Phone(Optional):</label>
+                            <input type="text" name="phone" class="form-control" id="phone"
                             data-errormessage-value-missing="Phone is required!"
                             />
 						</div>

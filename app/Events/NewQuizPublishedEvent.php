@@ -10,27 +10,18 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class NewReminderEvent
+class NewQuizPublishedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $view;
-    public $subject;
-    public $bod;
-    public $recipients;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($view, $subject, $bod, $recipients)
+    public function __construct()
     {
         //
-        $this->view = $view;
-        $this->subject = $subject;
-        $this->bod = $bod;
-        $this->recipients = $recipients;
     }
 
     /**

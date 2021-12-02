@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewQuizPublishedEvent;
+use App\Events\PublishQuizResultsEvent;
 use App\Quiztracker;
 use Illuminate\Http\Request;
 use App\Quiz;
@@ -66,12 +68,12 @@ class QuizController extends Controller
             }
         }
 
-        // Send Email
-        \App\HelperX::sendEmails('emails.quizresults_mail', 'QUIZ RESULTS ARE OUT!');
+        event(new PublishQuizResultsEvent());
     }   
 
     public function seenResults($id) {
-        return view('quiz.seen', compact('id'));
+        $attempt = request('attempt');
+        return view('quiz.seen', compact('id', 'attempt'));
     }
 
     public function seenXResults($id, $uxid) {
@@ -146,7 +148,7 @@ class QuizController extends Controller
 
        
         // Send Email to admins
-        \App\HelperX::sendEmailTOAdmins();
+        //\App\HelperX::sendEmailTOAdmins();
         
     }
 
@@ -182,7 +184,7 @@ class QuizController extends Controller
         $quiz->quiz_status = 'EXECUTION_STARTED';
         $quiz->save();
         // send Email here to every one
-        \App\HelperX::sendEmails('emails.quizpublished_mail', 'NEW QUIZ PUBLISHED!');
+        event(new NewQuizPublishedEvent());
     }
 
     public function cancel($id) {

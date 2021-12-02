@@ -332,10 +332,10 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <h1>Dear! {{auth()->user()->email}} </h1>
+                          <h1>Dear! {{$data["full_name"]}} </h1>
                           <p>Quiz results are out!!</p>
                           <p>You can now login to view the results!</p>
-                          <a href="{{\App\HelperX::appName()}}" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
+                          <a href="{{\App\HelperX::baseUrl()}}/dashboard" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	box-shadow:inset 0px 1px 0px 0px #cf866c;
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d0451b), color-stop(1, #bc3315));

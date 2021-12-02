@@ -23,8 +23,10 @@ class SettingController extends Controller
 
     public function changeappname() {
         $appname = request('appname');
+        $base_url = request('base_url');
         $s = \App\Setting::find(1);
         $s->system_name = $appname;
+        $s->base_url = $base_url;
         $s->save();
         return redirect()->back()->with('success', 'Successfully Updated!'); 
     }

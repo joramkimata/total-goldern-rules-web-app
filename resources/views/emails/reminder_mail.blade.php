@@ -332,7 +332,7 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <p>Dear {{auth()->user()->email}}!</p>
+                          <p>Dear {{$data["email"]}}!</p>
                           <p style=""><b>{!! $bod !!}</b></p>
                           
                           <p class="caption"></p>

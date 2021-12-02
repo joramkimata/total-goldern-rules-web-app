@@ -169,7 +169,7 @@
                         $("#reminderForm").css('opacity', 1);
 
 
-                       // window.location = redirectUrl;
+                        window.location = redirectUrl;
                         // if(res.error) {
                         // 	Biggo.showFeedBack(userEditForm, res.msg, res.error);
                         // }

@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\NewQuizPublishedEvent;
 use App\Events\NewReminderEvent;
+use App\Events\PublishQuizResultsEvent;
+use App\Listeners\NewQuizPublishedListener;
 use App\Listeners\NewReminderListener;
+use App\Listeners\PublishQuizResultsListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -17,6 +21,12 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         NewReminderEvent::class => [
             NewReminderListener::class
+        ],
+        NewQuizPublishedEvent::class => [
+            NewQuizPublishedListener::class
+        ],
+        PublishQuizResultsEvent::class => [
+            PublishQuizResultsListener::class
         ]
     ];
 

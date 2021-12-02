@@ -118,7 +118,8 @@
                                         <td>---</td>
                                         <td>
                                             <button class="btn btn-success btn-sm viewResultx" data-toggle="modal"
-                                                    route="{{route('quiz.results.seen', $q->id)}}"
+                                                    route="{{route('quiz.results.seen', ['id' => $q->id, 'attempt' => true])}}"
+
                                                     data-target="#userModalQuizResults">View My Attempts
                                             </button>
                                         </td>
@@ -139,7 +140,8 @@
                                             /{{\App\User::where('role_id', 2)->count()}}</td>
                                         <td>
                                             <button class="btn btn-primary btn-sm viewResultx" data-toggle="modal"
-                                                    route="{{route('quiz.results.seen', $q->id)}}"
+                                                    route="{{route('quiz.results.seen', ['id' => $q->id, 'attempt' => false])}}"
+
                                                     data-target="#userModalQuizResults">View Results
                                             </button>
                                         </td>

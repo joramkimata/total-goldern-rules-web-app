@@ -332,10 +332,10 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <h1>Dear <?php echo e(auth()->user()->name); ?> </h1>
+                          <h1>Dear <?php echo e(auth()->user()->email); ?> </h1>
                           <p>New Quiz was published !!</p>
                           <p>You can now start attempt!</p>
-                          <a href="" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
+                          <a href="<?php echo e(\App\HelperX::appName()); ?>" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	box-shadow:inset 0px 1px 0px 0px #cf866c;
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d0451b), color-stop(1, #bc3315));
@@ -391,7 +391,7 @@ a {
                 <div class="logo-image">
                     <a href="https://total.co.tz" target="_blank"><img src="https://totalenergies.co.tz/sites/all/themes/custom/totalenergy_theme/logo.png" alt="logo-alt" width="70" height="70"></a>
                 </div>
-                
+
             </td>
         </tr>
         </tbody>
