@@ -309,21 +309,10 @@ a {
 </style>
 
 <center class="wrapper">
-    <table class="top-panel center" width="602" border="0" cellspacing="0" cellpadding="0">
-        <tbody>
-        <tr>
-            <td class="title" width="300">Total Tanzania</td>
-            <td class="subject" width="300"><a class="strong" href="#" target="_blank">www.total.co.tz</a></td>
-        </tr>
-        <tr>
-            <td class="border" colspan="2">&nbsp;</td>
-        </tr>
-        </tbody>
-    </table>
 
     <div class="spacer">&nbsp;</div>
 
-    <table class="main center" width="602" border="0" cellspacing="0" cellpadding="0">
+    <table style="background-color: #F8BB86; padding: 12px" class="main center" width="602" border="0" cellspacing="0" cellpadding="0">
         <tbody>
         <tr>
             <td class="column">
@@ -332,7 +321,7 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <h1>Dear  {{$data["full_name"]}}</h1>
+                          <h1>Dear  {{$full_name}}</h1>
                           <p>New Quiz was published !!</p>
                           <p>You can now start attempt!</p>
                           <a href="{{\App\HelperX::baseUrl()}}/dashboard" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;

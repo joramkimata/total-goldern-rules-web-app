@@ -332,7 +332,7 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <p>Dear <?php echo e(auth()->user()->email); ?>!</p>
+                          <p>Dear <?php echo e($email); ?>!</p>
                           <p style=""><b><?php echo $bod; ?></b></p>
                           
                           <p class="caption"></p>

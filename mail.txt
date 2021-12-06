@@ -6,3 +6,8 @@ MAIL_PASSWORD=wdmekkszcioevher
 MAIL_ENCRYPTION=tls
 
 Dont forget to run  php artisan config:cache
+
+
+The Colum attempts is an tinyint field. as well as localhost.
+
+Modify to BIGINT or increase the field length to accomodate larger values.

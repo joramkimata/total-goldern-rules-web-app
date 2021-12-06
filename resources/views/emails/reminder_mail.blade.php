@@ -332,7 +332,7 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <p>Dear {{$data["email"]}}!</p>
+                          <p>Dear {{$email}}!</p>
                           <p style=""><b>{!! $bod !!}</b></p>
                           
                           <p class="caption"></p>

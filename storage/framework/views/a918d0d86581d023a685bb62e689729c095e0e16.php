@@ -323,7 +323,7 @@ a {
 
     <div class="spacer">&nbsp;</div>
 
-    <table class="main center" width="602" border="0" cellspacing="0" cellpadding="0">
+    <table style="background-color: #F8BB86; padding: 12px" class="main center" width="602" border="0" cellspacing="0" cellpadding="0">
         <tbody>
         <tr>
             <td class="column">
@@ -332,10 +332,10 @@ a {
                     <tbody>
                     <tr>
                         <td class="padded">
-                          <h1>Dear <?php echo e(auth()->user()->email); ?> </h1>
+                          <h1>Dear  <?php echo e($full_name); ?></h1>
                           <p>New Quiz was published !!</p>
                           <p>You can now start attempt!</p>
-                          <a href="<?php echo e(\App\HelperX::appName()); ?>" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
+                          <a href="<?php echo e(\App\HelperX::baseUrl()); ?>/dashboard" style="-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #cf866c;
 	box-shadow:inset 0px 1px 0px 0px #cf866c;
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d0451b), color-stop(1, #bc3315));

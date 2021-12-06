@@ -6,7 +6,7 @@ use App\Events\NewQuizPublishedEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NewQuizPublishedListener
+class NewQuizPublishedListener implements ShouldQueue
 {
     /**
      * Create the event listener.
