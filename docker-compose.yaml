@@ -36,7 +36,7 @@ services:
       # I'm using port 8888 to access docker to avoid conflict with port 80
       # in my local environment
       - "8888:80"
-      - "443:443"
+      - "444:443"
     volumes:
       - ./:/var/www
       - ./nginx/conf.d:/etc/nginx/conf.d/default.conf
