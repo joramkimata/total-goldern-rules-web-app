@@ -1,4 +1,4 @@
-FROM jakzal/phpqa:php7.4 as build
+FROM composer:1.10 as build
 COPY . /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
