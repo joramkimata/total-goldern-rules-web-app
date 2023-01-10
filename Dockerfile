@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 
 # Copy composer.lock and composer.json
 COPY composer.json /var/www/
@@ -29,8 +29,6 @@ RUN docker-php-ext-install pdo pdo_mysql
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-RUN composer require doctrine/inflector:1.1.0
 
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
