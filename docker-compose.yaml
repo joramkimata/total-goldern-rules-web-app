@@ -1,44 +1,68 @@
 version: "3"
 services:
+  #PHP Service
   app:
     build:
-      context: ./
-    volumes:
-      - .:/var/www/html
-      - .env.docker:/var/www/html/.env
-    ports:
-      - "8082:80"
+      context: .
+      dockerfile: Dockerfile
+    image: biggo6/php74
+    container_name: app
+    restart: unless-stopped
+    tty: true
     environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_DATABASE=laravel
-      - DB_USERNAME=laravel
-      - DB_PASSWORD=FhgVoFuOrWspc3TgBIA2K4dZGuJTPwSYBoLnNckcaxy
-    networks:
-      - laravel
-    depends_on:
-      - mysql
-  mysql:
-    image: "mysql/mysql-server:8.0"
-    environment:
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_USER: "laravel"
-      MYSQL_PASSWORD: "FhgVoFuOrWspc3TgBIA2K4dZGuJTPwSYBoLnNckcaxy"
-      MYSQL_DATABASE: "laravel"
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    ports:
-      - 3906:3306
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
     volumes:
-      - "mysql8:/var/lib/mysql"
-      - "./db/init.sql:/docker-entrypoint-initdb.d/01init.sql"
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
-      - laravel
+      - app-network
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      # I'm using port 8888 to access docker to avoid conflict with port 80
+      # in my local environment
+      - "8888:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d/default.conf
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      # The same principle goes for mysql by using port 3307 instead of
+      # default port 3306
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      # replace with your own mysql password here
+      MYSQL_ROOT_PASSWORD: YOUR_MYSQL_PASSWORD
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+#Docker Networks
 networks:
-  laravel:
+  app-network:
     driver: bridge
+#Volumes
 volumes:
-  mysql8:
+  dbdata:
     driver: local

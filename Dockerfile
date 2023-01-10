@@ -1,45 +1,48 @@
-FROM composer:2.2 as build
-COPY . /app/
-RUN composer update
-RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+FROM php:7.4-fpm
 
-FROM php:7.4-apache-buster as dev
+# Copy composer.lock and composer.json
+COPY composer.lock composer.json /var/www/
 
-ENV APP_ENV=dev
-ENV APP_DEBUG=true
-ENV COMPOSER_ALLOW_SUPERUSER=1
+# Set working directory
+WORKDIR /var/www
 
-RUN apt-get update && apt-get install -y zip
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    mariadb-client \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
+    unzip \
+    git \
+    curl
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
-COPY . /var/www/html/
-COPY --from=build /usr/bin/composer /usr/bin/composer
-RUN composer install --prefer-dist --no-interaction
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY .env.docker /var/www/html/.env
+# Add user for laravel application
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
 
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
+# Copy existing application directory contents
+COPY . /var/www
 
-# FROM php:8.1-apache-buster as production
+# Copy existing application directory permissions
+COPY --chown=www:www . /var/www
 
-# ENV APP_ENV=production
-# ENV APP_DEBUG=false
+# Change current user to www
+USER www
 
-# RUN docker-php-ext-configure opcache --enable-opcache && \
-#     docker-php-ext-install pdo pdo_mysql
-# COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-
-# COPY --from=build /app /var/www/html
-# COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-# COPY .env /var/www/html/.env
-
-# RUN php artisan config:cache && \
-#     php artisan route:cache && \
-#     chmod 777 -R /var/www/html/storage/ && \
-#     chown -R www-data:www-data /var/www/ && \
-#     a2enmod rewrite
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]
