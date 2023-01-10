@@ -210,10 +210,55 @@ class ApiController extends Controller
         return $ranks[auth()->user()->id] . "/" . \App\User::where('role_id', 2)->count();
     }
 
+    public function myQuizes() {
+
+        $quizes = \DB::table('quiz')->select('*')->where('is_published', 1)->orderBy('id', 'desc')->get();
+
+        $dataX = [];
+
+        if(count($quizes)) {
+
+            foreach ($quizes as $q) {
+                $c = \App\Attempt::where('user_id', auth()->user()->id)->where('quiz_id', $q->id)->orderBy('id', 'asc')->get();
+                if(count($c) != 0) {
+                    if($q->quiz_status != 'RESULTS_OUT') {
+                        $data = [];
+                        $data["quiz_id"]      = $q->id;
+                        $data["quiz_name"]    = $q->quiz_name;
+                        $data["description"]  = $q->description;
+                        $data["questions_no"] = $q->questions_no;
+                        $data["result"]       = [];
+                        $dataX[] = $data;
+                    }else {
+                        $data = [];
+                        $data["quiz_id"]      = $q->id;
+                        $data["quiz_name"]    = $q->quiz_name;
+                        $data["description"]  = $q->description;
+                        $data["questions_no"] = $q->questions_no;
+                        $data["result"]       = [];
+                        $dataX[] = $data;
+                    }
+                }
+            }
+
+        }
+
+        if(count($dataX) == 0) {
+            return response()->json([
+                "data" => ["quizes" => []]
+            ], 200);
+        }else {
+            return response()->json([
+                "data" => $dataX
+            ], 200);
+        }
+
+    }
+
     public function startQuiz($id) {
         $quiz = Quiz::find($id);
         if($quiz){
-             if($quiz->status == 1){
+             if($quiz->is_published == 1 && $quiz->quiz_status == 'EXECUTION_STARTED'){
 
                 $questions = \App\Question::where('quiz_id', $quiz->id)->orderBy('qn_no', 'ASC')->get();
 
@@ -290,17 +335,13 @@ class ApiController extends Controller
  *
  */
     public function dashboard() {
-        $quizes = \App\Quiz::where('status', 1)->orderBy('id', 'DESC')->get();
+        $quizes = \App\Quiz::where('is_published', 1)->orderBy('id', 'DESC')->get();
 
         if(count($quizes)) {
-
-            
 
             $dataX = [];
 
             foreach ($quizes as $q) {
-
-                
 
                 $c = \App\Quizfeedback::where('user_id', auth()->user()->id)->where('quiz_id', $q->id)->where('seen', 0)->get();
 

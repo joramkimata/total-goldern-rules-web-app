@@ -20,7 +20,9 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 	// Authenticated routes go here!
 	Route::get('me', 'ApiController@getAuthenticatedUser');
 	Route::get('dashboard', 'ApiController@dashboard');
-	Route::get('quiz/start/{id}', 'ApiController@startQuiz');
+    Route::get('quiz/start/{id}', 'ApiController@startQuiz');
+    Route::get('quiz/myquizes', 'ApiController@myQuizes');
 	Route::post('quiz/attempt/{id}/', 'ApiController@attempt');
 	Route::post('settings/changepassword', 'ApiController@changepassword');
+
 });
