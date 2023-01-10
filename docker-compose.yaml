@@ -3,7 +3,6 @@ services:
   app:
     build:
       context: ./
-      target: dev
     volumes:
       - .:/var/www/html
       - .env.docker:/var/www/html/.env
